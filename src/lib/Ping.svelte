@@ -9,7 +9,7 @@
 
   let count = 0;
 
-  onMount(async () => {
+  $: onMount(async () => {
     socket.emit('getPingCount', (pingCount) => {
       count = pingCount;
     });
