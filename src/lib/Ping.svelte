@@ -10,6 +10,12 @@
   let count = 0;
 
   $: onMount(async () => {
+    while (!socket) {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    }
+
+    console.log('Ping mounted');
+
     socket.emit('getPingCount', (pingCount) => {
       count = pingCount;
     });
