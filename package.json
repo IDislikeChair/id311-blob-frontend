@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host",
     "build": "vite build",
     "preview": "vite preview"
   },
@@ -14,6 +14,8 @@
     "vite": "^4.3.9"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^6.4.0",
+    "p5-svelte": "^3.1.2",
     "socket.io-client": "^4.6.1"
   }
 }
