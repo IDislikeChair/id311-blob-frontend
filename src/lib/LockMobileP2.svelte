@@ -36,9 +36,8 @@
 </script>
 
 <div class="clientTitle">
-  <h3>SWIMMING</h3>
-  <p>Use two fingers to alternately tap on the green rectangle</p>
-  <p>Current steps: {steps}</p>
+  <h3>LOCK PICKING</h3>
+  <p>Find the player with the matching lock and ask them to move the slider</p>
 </div>
 <div class="stepper">
   <div

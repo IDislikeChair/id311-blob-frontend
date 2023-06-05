@@ -1,7 +1,11 @@
 <script>
+  import P5 from 'p5-svelte';
   import { onDestroy, onMount } from 'svelte';
 
   export let socket;
+  export let ballSize = 20;
+  export let width = 800;
+  export let height = 600;
   let steps = 0;
   let isLeft = true;
 
@@ -35,42 +39,41 @@
   });
 </script>
 
-<div>
-  <div class="stepper">
-    <div
-      class="leftbox"
-      id={isLeft ? 'thisTime' : 'nextTime'}
-      on:touchstart={stepOnLeft}
-    />
-    <div
-      class="rightbox"
-      id={isLeft ? 'nextTime' : 'thisTime'}
-      on:touchstart={stepOnRight}
-    />
-  </div>
-  <div class="clientTitle">
-    <h3>SWIMMING</h3>
-    <p>Use two fingers to alternately tap on the green rectangle</p>
-    <p>Current steps: {steps}</p>
-  </div>
+<div class="clientTitle">
+  <h3>LOCK PICKING</h3>
+  <p>
+    Tilt the phone and ask the player with the matching lock to find the correct
+    spot
+  </p>
+</div>
+<div class="stepper">
+  <div
+    class="leftbox"
+    id={isLeft ? 'thisTime' : 'nextTime'}
+    on:touchstart={stepOnLeft}
+  />
+  <div
+    class="rightbox"
+    id={isLeft ? 'nextTime' : 'thisTime'}
+    on:touchstart={stepOnRight}
+  />
 </div>
 
 <style>
   .clientTitle {
-    text-align: center;
-    position: relative;
-    top: calc(-100vh + 30px);
+    width: 80vw;
+    margin-left: 30px;
   }
   .stepper {
     display: flex;
   }
   .leftbox {
     width: 50vw;
-    height: 100vh;
+    height: 400px;
   }
   .rightbox {
     width: 50vw;
-    height: 100vh;
+    height: 400px;
   }
 
   #thisTime {

@@ -2,6 +2,7 @@
   import { onMount } from 'svelte';
   import io from 'socket.io-client';
   import Step from './lib/Step.svelte';
+  import Lock from './lib/Lock.svelte';
   import { SOCKET } from './stores';
 
   let socket;
@@ -28,9 +29,10 @@
 </script>
 
 <main>
-  <h3>Server Connection: {status}</h3>
-  <div class="card">
+  <!-- <h3>Server Connection: {status}</h3> -->
+  <div>
     <Step {socket} />
+    <!-- <Lock {socket} /> -->
   </div>
 </main>
 
