@@ -1,10 +1,8 @@
 <script>
   import { Socket } from 'socket.io-client';
   import { SOCKET } from '../../stores';
-  import { createEventDispatcher, onMount } from 'svelte';
-  import MissionOneTV from './MissionOneTV.svelte';
-
-  const dispatch = createEventDispatcher();
+  import { onMount } from 'svelte';
+  import DebugGoToMission from '../DEBUG_go_to_mission.svelte';
 
   /** @type {Socket} */
   let socket;
@@ -12,24 +10,28 @@
     socket = value;
   });
 
+  let session_id;
+
   $: onMount(async () => {
     while (!socket) {
       await new Promise((resolve) => setTimeout(resolve, 100));
     }
 
-    socket.on('start_mission', () => {
-      dispatch('changeScene', {
-        new_scene: MissionOneTV,
-      });
+    socket.emit('get_session_id');
+
+    socket.on('post_session_id', (id) => {
+      console.log(id);
+      session_id = id;
     });
   });
 
-  const start_mission_one = () => {
-    socket.emit('start_mission_one');
+  const start = () => {
+    socket.emit('on_next');
   };
 </script>
 
 <div>
-  <div class="card">PreMissionOneTV</div>
-  <button on:click={start_mission_one} />
+  <div class="card">PreMissionOneTV {session_id}</div>
+  <button on:click={start}>start</button>
+  <svelte:component this={DebugGoToMission} />
 </div>

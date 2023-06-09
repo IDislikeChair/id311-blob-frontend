@@ -1,6 +1,6 @@
 <script>
   import { Socket } from 'socket.io-client';
-  import { SOCKET } from '../../stores';
+  import { PLAYER_NUMBER, SOCKET } from '../../stores';
   import { createEventDispatcher, onMount } from 'svelte';
   import PostMissionOne from './PostMissionOne.svelte';
 
@@ -13,6 +13,11 @@
   });
 
   let player_number;
+  PLAYER_NUMBER.subscribe((value) => {
+    player_number = value;
+  });
+
+  let result;
 
   $: onMount(async () => {
     while (!socket) {
@@ -20,7 +25,10 @@
     }
 
     socket.on('get_mission_result', () => {
-      socket.emit('post_mission_result', player_number);
+      socket.emit('post_mission_result', {
+        player_number: player_number,
+        stepCount: result,
+      });
     });
 
     socket.on('start_post_mission', () => {
@@ -33,6 +41,6 @@
 
 <div>
   <div class="card">
-    <input bind:value={player_number} />
+    <input bind:value={result} />
   </div>
 </div>

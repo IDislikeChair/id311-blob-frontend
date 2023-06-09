@@ -1,8 +1,8 @@
 <script>
   import { createEventDispatcher, onMount } from 'svelte';
-  import { SOCKET } from '../stores';
+  import { PLAYER_NUMBER, ROLE, SOCKET } from '../stores';
+  import PreMissionOneTv from './emceeScenes/PreMissionOneTV.svelte';
   import { Socket } from 'socket.io-client';
-  import MissionOneTv from './emceeScenes/MissionOneTV.svelte';
   import PreMissionOne from './playerScenes/PreMissionOne.svelte';
 
   const dispatch = createEventDispatcher();
@@ -26,13 +26,16 @@
     socket.emit('join_as', { role: 0 });
 
     socket.on('success_join_as_emcee', () => {
+      ROLE.set(0);
       dispatch('changeScene', {
-        new_scene: MissionOneTv,
+        new_scene: PreMissionOneTv,
       });
     });
 
-    socket.on('success_join_as_player', () => {
+    socket.on('success_join_as_player', (msg) => {
+      ROLE.set(1);
       console.log('here');
+      PLAYER_NUMBER.set(msg.player_number);
       dispatch('changeScene', {
         new_scene: PreMissionOne,
       });
