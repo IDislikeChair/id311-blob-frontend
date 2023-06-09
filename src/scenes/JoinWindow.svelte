@@ -32,15 +32,6 @@
       });
     });
 
-    socket.on('success_join_as_player', (msg) => {
-      ROLE.set(1);
-      console.log('here');
-      PLAYER_NUMBER.set(msg.player_number);
-      dispatch('changeScene', {
-        new_scene: PreMissionOne,
-      });
-    });
-
     socket.on('error', (error) => console.log(`Error: ${error}`));
   };
 
@@ -49,6 +40,15 @@
       role: 1,
       session_id: session_id,
       player_name: player_name,
+    });
+
+    socket.on('success_join_as_player', (msg) => {
+      ROLE.set(1);
+      console.log('here');
+      PLAYER_NUMBER.set(msg.player_number);
+      dispatch('changeScene', {
+        new_scene: PreMissionOne,
+      });
     });
   };
 </script>
