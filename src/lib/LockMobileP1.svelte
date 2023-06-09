@@ -1,87 +1,141 @@
 <script>
-  import P5 from 'p5-svelte';
   import { onDestroy, onMount } from 'svelte';
 
   export let socket;
-  export let ballSize = 20;
-  export let width = 800;
-  export let height = 600;
-  let steps = 0;
-  let isLeft = true;
+  export let status = 'Hello';
+  export let device = 'Device not identified';
+  let xAcc = 0;
+  let yAcc = 0;
+  let zAcc = 0;
+  let tiltInterval;
+  let tiltCoef = 1;
 
   $: onMount(async () => {
+    if (navigator.userAgent.match(/Android/i)) {
+      device = 'Android';
+      tiltCoef = -1;
+    } else if (navigator.userAgent.match(/iPhone/i)) {
+      device = 'iPhone';
+    } else {
+      device = 'We only support Android and iOS(iPhone)';
+    }
+    // Check if the device supports the accelerometer
+    if (window.DeviceMotionEvent) {
+      // Register the event listener for device motion
+      window.addEventListener('devicemotion', handleMotionEvent);
+      // Start the tilt detection interval
+      tiltInterval = setInterval(checkForTilt, 200);
+    } else if (window.DeviceOrientationEvent) {
+      window.addEventListener('deviceorientation', handleMotionEvent);
+      tiltInterval = setInterval(checkForTilt, 200);
+    } else {
+      // Display an error message if the device does not support the accelerometer
+      status = 'Accelerometer not supported';
+    }
+
     while (!socket) {
       await new Promise((resolve) => setTimeout(resolve, 100));
     }
-
-    socket.on('broadcastStepCount', (stepCount) => {
-      steps = stepCount;
-    });
   });
-
-  const stepOnLeft = async (event) => {
-    event.preventDefault();
-    if (isLeft) {
-      await socket.emit('stepOn');
-      isLeft = false;
-    }
-  };
-  const stepOnRight = async (event) => {
-    event.preventDefault();
-    if (!isLeft) {
-      await socket.emit('stepOn');
-      isLeft = true;
-    }
-  };
 
   onDestroy(() => {
-    socket.off('broadcastStepCount');
+    // Clean up event listeners and intervals
+    window.removeEventListener('devicemotion', handleMotionEvent);
+    clearInterval(tiltInterval);
   });
+
+  function handleMotionEvent(event) {
+    // Get the acceleration values including gravity
+    const acc = event.accelerationIncludingGravity;
+    // Update the acceleration values
+    xAcc = acc.x;
+    yAcc = acc.y;
+    zAcc = acc.z;
+    status = '' + Math.floor(xAcc * tiltCoef);
+  }
+
+  function checkForTilt() {
+    socket.emit('tilt', Number(status));
+  }
+
+  function getPermission() {
+    status = 'getPermissionFirst';
+    if (typeof DeviceMotionEvent.requestPermission === 'function') {
+      // iOS 13+
+      DeviceMotionEvent.requestPermission()
+        .then((response) => {
+          status = response;
+          if (response == 'granted') {
+            window.addEventListener('devicemotion', (e) => {
+              // do something with e
+            });
+          }
+        })
+        .catch(console.error);
+    } else {
+      // non iOS 13+
+      DeviceOrientationEvent.requestPermission()
+        .then((response) => {
+          status = response;
+          if (response == 'granted') {
+            window.addEventListener('deviceorientation', (e) => {
+              // do something with e
+            });
+          }
+        })
+        .catch(console.error);
+    }
+  }
 </script>
 
-<div class="clientTitle">
-  <h3>LOCK PICKING</h3>
-  <p>
-    Tilt the phone and ask the player with the matching lock to find the correct
-    spot
-  </p>
-</div>
-<div class="stepper">
-  <div
-    class="leftbox"
-    id={isLeft ? 'thisTime' : 'nextTime'}
-    on:touchstart={stepOnLeft}
-  />
-  <div
-    class="rightbox"
-    id={isLeft ? 'nextTime' : 'thisTime'}
-    on:touchstart={stepOnRight}
-  />
+<div class="lockMobileContainer">
+  <div id="device">Device Type: {device}</div>
+  {#if device == 'iPhone'}
+    <p>
+      If you are a iPhone user,<br />get permission first by clicking the button
+      here<br />👇
+    </p>
+    <button on:click={getPermission}>Get Permission</button>
+  {/if}
+  <div id="status">Tilting Status: {status}</div>
+  <div class="clientTitle">
+    <h3>LOCK PICKING</h3>
+    <p>
+      Find the player whose mechanism you control. Press unlock at their
+      specified location.
+    </p>
+  </div>
+
+  <div class="instruction">
+    Tilt the phone left or right to control the mechanism on your partner’s
+    phone.
+  </div>
+
+  <div class="pickTrial">
+    <p>3 attempts left</p>
+    <button>Pick</button>
+  </div>
 </div>
 
 <style>
-  .clientTitle {
-    width: 80vw;
-    margin-left: 30px;
-  }
-  .stepper {
+  .lockMobileContainer {
     display: flex;
+    flex-direction: column;
+    align-items: center;
   }
-  .leftbox {
-    width: 50vw;
-    height: 400px;
+  .clientTitle {
+    width: 75%;
+    margin-top: 30px;
+    font-size: 16px;
   }
-  .rightbox {
-    width: 50vw;
-    height: 400px;
+  .instruction {
+    width: 75%;
+    margin-top: 100px;
+    font-size: 24px;
   }
-
-  #thisTime {
-    background-color: #7eff9a;
-    opacity: 0.5;
-  }
-  #nextTime {
-    background-color: rgb(220, 220, 220);
-    opacity: 0.5;
+  .pickTrial {
+    width: 75%;
+    margin-top: 100px;
+    font-size: 16px;
   }
 </style>

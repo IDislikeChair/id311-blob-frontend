@@ -9,12 +9,13 @@
   let status = 'NONE';
 
   onMount(async () => {
-    // socket = io('https://blob-backend.herokuapp.com');
-    socket = io('http://192.168.0.2:3000');
+    // const backend = 'https://blob-backend.herokuapp.com';
+    const backend = 'http://192.168.0.2:3000';
+    socket = io(backend);
     SOCKET.set(socket);
 
     socket.on('connect', () => {
-      console.log('connected');
+      console.log('connected to socket', backend);
       status = 'CONNECTED';
     });
 

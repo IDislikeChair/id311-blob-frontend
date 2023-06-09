@@ -10,22 +10,24 @@
       await new Promise((resolve) => setTimeout(resolve, 100));
     }
 
-    socket.on('broadcastStepCount', (stepCount) => {
+    socket.on('getMyStepCounts', (stepCount) => {
       steps = stepCount;
     });
   });
 
-  const stepOnLeft = async (event) => {
+  const stepOnLeft = (event) => {
     event.preventDefault();
     if (isLeft) {
-      await socket.emit('stepOn');
+      steps += 1;
+      socket.emit('stepOn', steps);
       isLeft = false;
     }
   };
-  const stepOnRight = async (event) => {
+  const stepOnRight = (event) => {
     event.preventDefault();
     if (!isLeft) {
-      await socket.emit('stepOn');
+      steps += 1;
+      socket.emit('stepOn', steps);
       isLeft = true;
     }
   };
@@ -35,7 +37,7 @@
   });
 </script>
 
-<div>
+<div class="stepClientContainer">
   <div class="stepper">
     <div
       class="leftbox"
@@ -51,15 +53,20 @@
   <div class="clientTitle">
     <h3>SWIMMING</h3>
     <p>Use two fingers to alternately tap on the green rectangle</p>
-    <p>Current steps: {steps}</p>
   </div>
 </div>
 
 <style>
+  .stepClientContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
   .clientTitle {
-    text-align: center;
     position: relative;
     top: calc(-100vh + 30px);
+    width: 75%;
+    font-size: 16px;
   }
   .stepper {
     display: flex;
@@ -74,11 +81,9 @@
   }
 
   #thisTime {
-    background-color: #7eff9a;
-    opacity: 0.5;
+    background-color: #8effa6;
   }
   #nextTime {
-    background-color: rgb(220, 220, 220);
-    opacity: 0.5;
+    background-color: #e6e6e6;
   }
 </style>

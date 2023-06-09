@@ -16,7 +16,12 @@
     }
 
     socket.on('broadcastStepCount', (stepCount) => {
-      steps = stepCount;
+      for (let socketID of Object.keys(stepCount)) {
+        if (stepCount[socketID].steps > 0) {
+          steps = stepCount[socketID].steps;
+          break;
+        }
+      }
     });
   });
 
