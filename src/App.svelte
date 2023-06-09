@@ -10,7 +10,6 @@
   import PostMissionOne from './scenes/playerScenes/PostMissionOne.svelte';
   import PostMissionOneTv from './scenes/emceeScenes/PostMissionOneTV.svelte';
 
-  import Step from './lib/Step.svelte';
   import Lock from './lib/Lock.svelte';
 
   let socket;
@@ -25,10 +24,10 @@
   current_scene = JoinWindow;
 
   onMount(async () => {
-    socket = io('https://blob-backend.herokuapp.com');
+    // socket = io('https://blob-backend.herokuapp.com');
     // const backend = 'https://blob-backend.herokuapp.com';
-    // const backend = 'http://192.168.0.2:3000'; // For local dev
-    // socket = io(backend);
+    const backend = 'http://192.168.0.2:3000'; // For local dev
+    socket = io(backend);
 
     SOCKET.set(socket);
 

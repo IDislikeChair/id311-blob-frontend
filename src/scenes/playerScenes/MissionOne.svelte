@@ -3,6 +3,7 @@
   import { PLAYER_NUMBER, SOCKET } from '../../stores';
   import { createEventDispatcher, onMount } from 'svelte';
   import PostMissionOne from './PostMissionOne.svelte';
+  import StepMobile from '../../lib/StepMobile.svelte';
 
   const dispatch = createEventDispatcher();
 
@@ -41,6 +42,6 @@
 
 <div>
   <div class="card">
-    <input bind:value={result} />
+    <StepMobile {socket} />
   </div>
 </div>

@@ -3,6 +3,7 @@
   import { SOCKET } from '../../stores';
   import { createEventDispatcher, onMount } from 'svelte';
   import DebugGoToMission from '../DEBUG_go_to_mission.svelte';
+  import StepTV from '../../lib/StepTV.svelte';
   DebugGoToMission;
 
   /** @type {Socket} */
@@ -15,12 +16,12 @@
     while (!socket) {
       await new Promise((resolve) => setTimeout(resolve, 100));
     }
-
-    // socket.on(...)
   });
 </script>
 
 <div>
-  <div class="card">MissionOneTV</div>
+  <div>
+    <StepTV {socket} ballSize={50} />
+  </div>
   <svelte:component this={DebugGoToMission} />
 </div>
