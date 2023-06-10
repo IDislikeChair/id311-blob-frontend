@@ -5,13 +5,13 @@
   import DebugGoToMission from '../DEBUG_go_to_mission.svelte';
   import P5 from 'p5-svelte';
 
-  import boat from '../../assets/boat.png';
-  import player1 from '../../assets/player1.png';
-  import player2 from '../../assets/player2.png';
-  import player3 from '../../assets/player3.png';
-  import player4 from '../../assets/player4.png';
-  import player5 from '../../assets/player5.png';
-  import player6 from '../../assets/player6.png';
+  import boat from '../../../docs/images/boat.png';
+  import player1 from '../../../docs/images/player1.png';
+  import player2 from '../../../docs/images/player2.png';
+  import player3 from '../../../docs/images/player3.png';
+  import player4 from '../../../docs/images/player4.png';
+  import player5 from '../../../docs/images/player5.png';
+  import player6 from '../../../docs/images/player6.png';
   DebugGoToMission;
 
   const margin = 10;
@@ -117,14 +117,35 @@
             playerSize,
             playerSize * pRatio
           );
+
+          p5.noStroke();
+          p5.fill('#ffffff');
+          p5.textAlign(p5.CENTER);
+          p5.textSize(playerSize / 2.8);
+          p5.text(
+            pName,
+            (width / 3) * (Math.floor(rank / 2) + 1) +
+              (coeffe * playerSize) / 1.8,
+            boatSize * boatRatio * 0.75 - playerSize / 2.5
+          );
         } else {
-          p5.imageMode(p5.CORNER);
+          p5.imageMode(p5.CENTER);
           p5.image(
             images['players'][i],
             (width / (curPlayers + 1)) * (i + 1),
             height - playerSize - steps[pName] * stepAmout,
             playerSize,
             playerSize * pRatio
+          );
+
+          p5.noStroke();
+          p5.fill('#ffffff');
+          p5.textAlign(p5.CENTER);
+          p5.textSize(playerSize / 2.8);
+          p5.text(
+            pName,
+            (width / (curPlayers + 1)) * (i + 1),
+            height - playerSize - steps[pName] * stepAmout - playerSize / 2.5
           );
         }
       }
@@ -142,9 +163,7 @@
     flex-direction: column;
     align-items: center;
 
-    /* margin-top: 4px; */
-
-    background-image: url('../../assets/mission1_background.png');
+    background-image: url('../../../docs/images/mission1_background.png');
     background-size: cover;
     width: 100vw;
     height: 100vh;

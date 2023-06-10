@@ -5,14 +5,14 @@
   import DebugGoToMission from '../DEBUG_go_to_mission.svelte';
   import P5 from 'p5-svelte';
 
-  import box_open from '../../assets/box_open.png';
-  import box_closed from '../../assets/box_closed.png';
-  import player1 from '../../assets/player1.png';
-  import player2 from '../../assets/player2.png';
-  import player3 from '../../assets/player3.png';
-  import player4 from '../../assets/player4.png';
-  import player5 from '../../assets/player5.png';
-  import player6 from '../../assets/player6.png';
+  import box_open from '../../../docs/images/box_open.png';
+  import box_closed from '../../../docs/images/box_closed.png';
+  import player1 from '../../../docs/images/player1.png';
+  import player2 from '../../../docs/images/player2.png';
+  import player3 from '../../../docs/images/player3.png';
+  import player4 from '../../../docs/images/player4.png';
+  import player5 from '../../../docs/images/player5.png';
+  import player6 from '../../../docs/images/player6.png';
   DebugGoToMission;
 
   const margin = 10;
@@ -113,7 +113,7 @@
     flex-direction: column;
     align-items: center;
 
-    background-image: url('../../assets/mission2_background.png');
+    background-image: url('../../../docs/images/mission2_background.png');
     background-size: cover;
     width: 100vw;
     height: 100vh;

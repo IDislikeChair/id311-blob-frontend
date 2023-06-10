@@ -1,0 +1,219 @@
+<script>
+  import { Socket } from 'socket.io-client';
+  import { SOCKET } from '../../stores';
+  import { onMount } from 'svelte';
+  import DebugGoToMission from '../DEBUG_go_to_mission.svelte';
+
+  /** @type {Socket} */
+  let socket;
+  SOCKET.subscribe((value) => {
+    socket = value;
+  });
+
+  let session_id;
+  let pNames = [];
+  let playerNum = 0;
+
+  $: onMount(async () => {
+    while (!socket) {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    }
+
+    socket.emit('get_session_id');
+
+    socket.on('post_session_id', (id) => {
+      session_id = id;
+    });
+  });
+
+  socket.on('broadcastPlayerStatus', (players) => {
+    for (let socketID of Object.keys(players)) {
+      if (pNames.includes(players[socketID].pName)) continue;
+      pNames.push(players[socketID].pName);
+    }
+    playerNum = pNames.length;
+  });
+  const start = () => {
+    socket.emit('on_next');
+  };
+</script>
+
+<div class="waitingPlayers" style="--innerWidth:{window.innerWidth};">
+  <div class="hostInfo">
+    <div class="codeTitle">Game Code:</div>
+    <div class="gameCode">{session_id}</div>
+    <button class="startGame" on:click={start}>Start Game</button>
+  </div>
+  <div class="joinedPlayers">
+    Joined Players:
+    <div class="player">
+      <div class="pImage">
+        <img
+          src="../../../docs/images/player1.png"
+          alt="player1"
+          height={window.innerHeight * 0.07}
+        />
+      </div>
+      <div class="pName">
+        {#if playerNum > 0}
+          {pNames[0]}
+        {:else}
+          ...
+        {/if}
+      </div>
+    </div>
+    <div class="player">
+      <div class="pImage">
+        <img
+          src="../../../docs/images/player2.png"
+          alt="player2"
+          height={window.innerHeight * 0.07}
+        />
+      </div>
+      <div class="pName">
+        {#if playerNum > 1}
+          {pNames[1]}
+        {:else}
+          ...
+        {/if}
+      </div>
+    </div>
+    <div class="player">
+      <div class="pImage">
+        <img
+          src="../../../docs/images/player3.png"
+          alt="player3"
+          height={window.innerHeight * 0.07}
+        />
+      </div>
+      <div class="pName">
+        {#if playerNum > 2}
+          {pNames[2]}
+        {:else}
+          ...
+        {/if}
+      </div>
+    </div>
+    <div class="player">
+      <div class="pImage">
+        <img
+          src="../../../docs/images/player4.png"
+          alt="player4"
+          height={window.innerHeight * 0.07}
+        />
+      </div>
+      <div class="pName">
+        {#if playerNum > 3}
+          {pNames[3]}
+        {:else}
+          ...
+        {/if}
+      </div>
+    </div>
+    <div class="player">
+      <div class="pImage">
+        <img
+          src="../../../docs/images/player5.png"
+          alt="player5"
+          height={window.innerHeight * 0.07}
+        />
+      </div>
+      <div class="pName">
+        {#if playerNum > 4}
+          {pNames[4]}
+        {:else}
+          ...
+        {/if}
+      </div>
+    </div>
+    <div class="player">
+      <div class="pImage">
+        <img
+          src="../../../docs/images/player6.png"
+          alt="player6"
+          height={window.innerHeight * 0.07}
+        />
+      </div>
+      <div class="pName">
+        {#if playerNum > 5}
+          {pNames[5]}
+        {:else}
+          ...
+        {/if}
+      </div>
+    </div>
+  </div>
+  <!-- <svelte:component this={DebugGoToMission} /> -->
+</div>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Road+Rage&display=swap');
+
+  .waitingPlayers {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+    background-image: url('../../../docs/images/join_background.png');
+    background-size: cover;
+    width: 100vw;
+    height: 100vh;
+  }
+
+  .hostInfo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .codeTitle {
+    font-size: 10vh;
+    line-height: 12vh;
+    color: white;
+  }
+  .gameCode {
+    font-family: 'Road Rage', cursive;
+    font-size: 35vh;
+    line-height: 30vh;
+    color: rgb(132, 216, 15);
+    -webkit-text-stroke: 0.4vh white;
+    text-shadow: 1vh 1vh 0px #373f3d;
+  }
+  .startGame {
+    height: 8vh;
+    display: flex;
+    align-items: center;
+
+    margin-top: 6vh;
+    border-radius: 0px;
+    border: 0.5vh solid #373f3d;
+    box-shadow: 1vh 1vh 0px #373f3d;
+
+    font-size: 8vh;
+    color: white;
+    background-color: rgb(132, 216, 15);
+  }
+
+  .joinedPlayers {
+    width: 32vw;
+    height: 65vh;
+    margin-left: 12vw;
+    padding: 5vh;
+    background-color: #f4f9fa;
+    border: 0.5vh solid #373f3d;
+    box-shadow: 1vh 1vh 0px #373f3d;
+    font-size: 5vh;
+  }
+  .player {
+    display: flex;
+    height: 10vh;
+  }
+  .pImage {
+    width: 10vw;
+    margin-right: 2vw;
+    text-align: center;
+  }
+  .pName {
+    width: 15vw;
+  }
+</style>
