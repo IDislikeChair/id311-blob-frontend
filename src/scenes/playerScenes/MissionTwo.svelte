@@ -109,7 +109,7 @@
     align-items: center;
     justify-content: center;
 
-    background-image: url('../../assets/mission2_background.png');
+    background-image: url('../../../docs/images/mission2_background.png');
     background-size: cover;
     width: 100vw;
     height: calc(var(--innerHeight) * 1px);

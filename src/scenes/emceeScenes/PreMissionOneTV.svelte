@@ -31,8 +31,8 @@
 </script>
 
 <div class="preMissionOneTVContainer">
-  <div class="card">PreMissionOneTV {session_id}</div>
-  <button on:click={start}>start</button>
+  <!-- <div class="card">PreMissionOneTV {session_id}</div> -->
+  <button class="startBtn" on:click={start}>NEXT</button>
   <svelte:component this={DebugGoToMission} />
 </div>
 
@@ -42,9 +42,23 @@
     flex-direction: column;
     align-items: center;
 
-    background-image: url('../../assets/mission1_pre.png');
+    background-image: url('../../../docs/images/mission1_pre.png');
     background-size: cover;
+    background-position: center;
     width: 100vw;
     height: 100vh;
+  }
+  .startBtn {
+    display: flex;
+    align-items: center;
+    font-size: 3vh;
+
+    position: fixed;
+    right: 15vw;
+    bottom: 18vh;
+
+    border: 0.5vh solid #373f3d;
+    border-radius: 0px;
+    box-shadow: 0.5vh 0.5vh 0px #373f3d;
   }
 </style>
