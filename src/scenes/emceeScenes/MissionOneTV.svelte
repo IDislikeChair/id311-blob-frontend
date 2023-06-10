@@ -5,7 +5,6 @@
   import DebugGoToMission from '../DEBUG_go_to_mission.svelte';
   import P5 from 'p5-svelte';
 
-  import bgImg from '../../../docs/assets/mission1_background.png';
   import boat from '../../../docs/assets/boat.png';
   import player1 from '../../../docs/assets/player1.png';
   import player2 from '../../../docs/assets/player2.png';
@@ -53,7 +52,6 @@
     let bgRatio, boatRatio, lineYPos;
 
     p5.preload = function () {
-      images['bgImg'] = p5.loadImage(bgImg);
       images['boat'] = p5.loadImage(boat);
       images['players'] = [];
       images['players'].push(p5.loadImage(player1));
@@ -67,12 +65,14 @@
     p5.setup = function () {
       p5.createCanvas(width, height);
 
-      bgRatio = images['bgImg'].height / images['bgImg'].width;
       boatRatio = images['boat'].height / images['boat'].width;
       lineYPos = playerSize * 2.5 * boatRatio + playerSize;
     };
 
     p5.draw = function () {
+      p5.clear();
+      p5.noStroke();
+
       for (let player of Object.keys(steps)) {
         if (reachedPlayers.includes(player)) continue;
         if (
@@ -81,11 +81,6 @@
         )
           reachedPlayers.push(player);
       }
-
-      p5.imageMode(p5.CORNER);
-      p5.background(images['bgImg'], width, height * bgRatio);
-      p5.noStroke();
-      p5.fill(255);
 
       p5.imageMode(p5.CENTER);
 
@@ -147,6 +142,11 @@
     flex-direction: column;
     align-items: center;
 
-    margin-top: 4px;
+    /* margin-top: 4px; */
+
+    background-image: url('../../../docs/assets/mission1_background.png');
+    background-size: cover;
+    width: 100vw;
+    height: 100vh;
   }
 </style>
