@@ -33,15 +33,6 @@
       await new Promise((resolve) => setTimeout(resolve, 100));
     }
 
-    if (navigator.userAgent.match(/Android/i)) {
-      device = 'Android';
-      tiltCoef = -1;
-    } else if (navigator.userAgent.match(/iPhone/i)) {
-      device = 'iPhone';
-      getPermission();
-    } else {
-      device = 'We only support Android and iOS(iPhone)';
-    }
     // Check if the device supports the accelerometer
     if (window.DeviceMotionEvent) {
       // Register the event listener for device motion
@@ -92,35 +83,6 @@
 
   function checkForTilt() {
     socket.emit('beTilted', Number(status));
-  }
-
-  function getPermission() {
-    status = 'getPermissionFirst';
-    if (typeof DeviceMotionEvent.requestPermission === 'function') {
-      // iOS 13+
-      DeviceMotionEvent.requestPermission()
-        .then((response) => {
-          status = response;
-          if (response == 'granted') {
-            window.addEventListener('devicemotion', (e) => {
-              // do something with e
-            });
-          }
-        })
-        .catch(console.error);
-    } else {
-      // non iOS 13+
-      DeviceOrientationEvent.requestPermission()
-        .then((response) => {
-          status = response;
-          if (response == 'granted') {
-            window.addEventListener('deviceorientation', (e) => {
-              // do something with e
-            });
-          }
-        })
-        .catch(console.error);
-    }
   }
 </script>
 
