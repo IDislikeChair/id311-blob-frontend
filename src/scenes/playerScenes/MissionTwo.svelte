@@ -33,6 +33,15 @@
       await new Promise((resolve) => setTimeout(resolve, 100));
     }
 
+    if (navigator.userAgent.match(/Android/i)) {
+      device = 'Android';
+      tiltCoef = -1;
+    } else if (navigator.userAgent.match(/iPhone/i)) {
+      device = 'iPhone';
+    } else {
+      device = 'We only support Android and iOS(iPhone)';
+    }
+
     // Check if the device supports the accelerometer
     if (window.DeviceMotionEvent) {
       // Register the event listener for device motion
