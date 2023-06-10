@@ -24,8 +24,8 @@
   current_scene = JoinWindow;
 
   onMount(async () => {
-    const backend = 'https://blob-backend.herokuapp.com';
-    // const backend = 'http://192.168.0.2:3000'; // For local dev
+    // const backend = 'https://blob-backend.herokuapp.com';
+    const backend = 'http://192.168.0.2:3000'; // For local dev
     socket = io(backend);
 
     SOCKET.set(socket);
