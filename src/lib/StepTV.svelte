@@ -8,7 +8,7 @@
   export let height = 600;
   export let socket;
 
-  let steps = 0;
+  let steps = {};
 
   $: onMount(async () => {
     while (!socket) {
@@ -17,10 +17,7 @@
 
     socket.on('broadcastStepCount', (stepCount) => {
       for (let socketID of Object.keys(stepCount)) {
-        if (stepCount[socketID].steps > 0) {
-          steps = stepCount[socketID].steps;
-          break;
-        }
+        steps[stepCount[socketID].pName] = stepCount[socketID].steps;
       }
     });
   });
