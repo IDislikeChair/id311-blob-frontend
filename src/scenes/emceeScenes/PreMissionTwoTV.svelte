@@ -42,7 +42,7 @@
     flex-direction: column;
     align-items: center;
 
-    background-image: url('../../../docs/assets/mission1_pre.png');
+    background-image: url('../../assets/mission1_pre.png');
     background-size: cover;
     width: 100vw;
     height: 100vh;
