@@ -11,6 +11,9 @@
   const go_to_pre_mission = (id) => {
     socket.emit('DEBUG_go_to_pre_mission', id);
   };
+  const reset_players = () => {
+    socket.emit('reset_players');
+  };
 </script>
 
 <div class="card">
@@ -19,5 +22,8 @@
     <button on:click={() => go_to_pre_mission(1)}> go to Pre Mission 1 </button>
     <button on:click={() => go_to_pre_mission(2)}> go to Pre Mission 2 </button>
     <button on:click={() => go_to_pre_mission(3)}> go to Pre Mission 3 </button>
+    <button on:click={() => reset_players()}>
+      Reset all players connection
+    </button>
   </div>
 </div>
