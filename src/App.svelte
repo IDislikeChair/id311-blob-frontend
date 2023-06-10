@@ -24,8 +24,6 @@
   import PostMissionThree from './scenes/playerScenes/PostMissionThree.svelte';
   import PostMissionThreeTv from './scenes/emceeScenes/PostMissionThreeTV.svelte';
 
-  import Lock from './lib/Lock.svelte';
-
   let socket;
   let status = 'NONE';
   let current_scene;
@@ -38,8 +36,8 @@
   current_scene = JoinWindow;
 
   onMount(async () => {
-    // const backend = 'https://blob-backend.herokuapp.com';
-    const backend = 'http://192.168.0.2:3000'; // For local dev
+    const backend = 'https://blob-backend.herokuapp.com';
+    // const backend = 'http://192.168.0.2:3000'; // For local dev
     socket = io(backend);
 
     SOCKET.set(socket);
