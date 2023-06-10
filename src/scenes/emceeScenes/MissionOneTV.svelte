@@ -34,7 +34,7 @@
       await new Promise((resolve) => setTimeout(resolve, 100));
     }
 
-    socket.on('broadcastStepCount', (stepCount) => {
+    socket.on('broadcastPlayerStatus', (stepCount) => {
       for (let socketID of Object.keys(stepCount)) {
         steps[stepCount[socketID].pName] = stepCount[socketID].steps;
       }
@@ -42,7 +42,7 @@
   });
 
   onDestroy(() => {
-    socket.off('broadcastStepCount');
+    socket.off('broadcastPlayerStatus');
   });
 
   console.log(steps);
