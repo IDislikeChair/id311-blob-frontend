@@ -78,7 +78,7 @@
     xAcc = acc.x;
     yAcc = acc.y;
     zAcc = acc.z;
-    status = '' + Math.floor(yAcc * tiltCoef);
+    status = '' + Math.floor(xAcc * tiltCoef);
   }
 
   function checkForTilt() {
