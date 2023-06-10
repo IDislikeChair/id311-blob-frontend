@@ -30,19 +30,19 @@
   };
 </script>
 
-<div class="preMissionOneTVContainer">
-  <div class="card">PreMissionOneTV {session_id}</div>
+<div class="preMissionTwoTVContainer">
+  <div class="card">PreMissionTwoTV {session_id}</div>
   <button on:click={start}>start</button>
   <svelte:component this={DebugGoToMission} />
 </div>
 
 <style>
-  .preMissionOneTVContainer {
+  .preMissionTwoTVContainer {
     display: flex;
     flex-direction: column;
     align-items: center;
 
-    background-image: url('../../assets/mission1_pre.png');
+    background-image: url('../../assets/mission2_pre.png');
     background-size: cover;
     width: 100vw;
     height: 100vh;

@@ -34,9 +34,9 @@
       await new Promise((resolve) => setTimeout(resolve, 100));
     }
 
-    socket.on('broadcastPlayerStatus', (stepCount) => {
-      for (let socketID of Object.keys(stepCount)) {
-        steps[stepCount[socketID].pName] = stepCount[socketID].steps;
+    socket.on('broadcastPlayerStatus', (players) => {
+      for (let socketID of Object.keys(players)) {
+        steps[players[socketID].pName] = players[socketID].steps;
       }
     });
   });
