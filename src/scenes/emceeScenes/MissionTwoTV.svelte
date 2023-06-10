@@ -38,10 +38,10 @@
         if (tilts[players[socketID].pName]) {
           tilts[players[socketID].pName] += players[socketID].tilts;
 
-          if (tilts[players[socketID].pName] < playerSize)
-            tilts[players[socketID].pName] = playerSize;
-          else if (tilts[players[socketID].pName] > width - playerSize)
-            tilts[players[socketID].pName] = width - playerSize;
+          if (tilts[players[socketID].pName] < 0)
+            tilts[players[socketID].pName] = 0;
+          else if (tilts[players[socketID].pName] > width - 2 * playerSize)
+            tilts[players[socketID].pName] = width - 2 * playerSize;
         } else {
           tilts[players[socketID].pName] = width / 2;
         }
