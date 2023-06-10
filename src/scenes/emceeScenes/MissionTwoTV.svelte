@@ -35,7 +35,16 @@
     socket.on('broadcastPlayerStatus', (players) => {
       for (let socketID of Object.keys(players)) {
         if (!players[socketID].alive) continue;
-        tilts[players[socketID].pName] = players[socketID].tilts;
+        if (tilts[players[socketID].pName]) {
+          tilts[players[socketID].pName] += players[socketID].tilts;
+
+          if (tilts[players[socketID].pName] < playerSize)
+            tilts[players[socketID].pName] = playerSize;
+          else if (tilts[players[socketID].pName] > width - playerSize)
+            tilts[players[socketID].pName] = width - playerSize;
+        } else {
+          tilts[players[socketID].pName] = width / 2;
+        }
       }
       //   console.log(tilts);
     });
@@ -80,15 +89,11 @@
       for (let i = 0; i < curPlayers; i++) {
         const pRatio = images['players'][i].height / images['players'][i].width;
         const pName = Object.keys(tilts)[i];
-        const pXPos = Math.min(
-          width - playerSize,
-          Math.max(playerSize, width / 2 + tilts[pName])
-        );
 
         p5.imageMode(p5.CORNER);
         p5.image(
           images['players'][i],
-          pXPos,
+          tilts[pName],
           height / 2,
           playerSize,
           playerSize * pRatio
