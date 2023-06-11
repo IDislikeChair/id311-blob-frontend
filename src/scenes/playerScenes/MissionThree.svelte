@@ -87,7 +87,7 @@
     align-items: center;
     justify-content: center;
 
-    background-image: url('../../../docs/images/mission3_background.png');
+    background-image: url('../../images/mission3_background.png');
     background-size: cover;
     width: 100vw;
     height: calc(var(--innerHeight) * 1px);

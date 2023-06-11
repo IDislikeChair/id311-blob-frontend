@@ -5,13 +5,13 @@
   import DebugGoToMission from '../DEBUG_go_to_mission.svelte';
   import P5 from 'p5-svelte';
 
-  import boat from '../../../docs/images/boat.png';
-  import player1 from '../../../docs/images/player1.png';
-  import player2 from '../../../docs/images/player2.png';
-  import player3 from '../../../docs/images/player3.png';
-  import player4 from '../../../docs/images/player4.png';
-  import player5 from '../../../docs/images/player5.png';
-  import player6 from '../../../docs/images/player6.png';
+  import boat from '../../images/boat.png';
+  import player1 from '../../images/player1.png';
+  import player2 from '../../images/player2.png';
+  import player3 from '../../images/player3.png';
+  import player4 from '../../images/player4.png';
+  import player5 from '../../images/player5.png';
+  import player6 from '../../images/player6.png';
   DebugGoToMission;
 
   const margin = 10;
@@ -76,7 +76,7 @@
 
     /* margin-top: 4px; */
 
-    background-image: url('../../../docs/images/mission3_background.png');
+    background-image: url('../../images/mission3_background.png');
     background-size: cover;
     width: 100vw;
     height: 100vh;
