@@ -49,7 +49,7 @@
     <div class="player">
       <div class="pImage">
         <img
-          src="../../../docs/images/player1.png"
+          src="../../images/player1.png"
           alt="player1"
           height={window.innerHeight * 0.07}
         />
@@ -65,7 +65,7 @@
     <div class="player">
       <div class="pImage">
         <img
-          src="../../../docs/images/player2.png"
+          src="../../images/player2.png"
           alt="player2"
           height={window.innerHeight * 0.07}
         />
@@ -81,7 +81,7 @@
     <div class="player">
       <div class="pImage">
         <img
-          src="../../../docs/images/player3.png"
+          src="../../images/player3.png"
           alt="player3"
           height={window.innerHeight * 0.07}
         />
@@ -97,7 +97,7 @@
     <div class="player">
       <div class="pImage">
         <img
-          src="../../../docs/images/player4.png"
+          src="../../images/player4.png"
           alt="player4"
           height={window.innerHeight * 0.07}
         />
@@ -113,7 +113,7 @@
     <div class="player">
       <div class="pImage">
         <img
-          src="../../../docs/images/player5.png"
+          src="../../images/player5.png"
           alt="player5"
           height={window.innerHeight * 0.07}
         />
@@ -129,7 +129,7 @@
     <div class="player">
       <div class="pImage">
         <img
-          src="../../../docs/images/player6.png"
+          src="../../images/player6.png"
           alt="player6"
           height={window.innerHeight * 0.07}
         />
@@ -155,7 +155,7 @@
     align-items: center;
     justify-content: center;
 
-    background-image: url('../../../docs/images/join_background.png');
+    background-image: url('../../images/join_background.png');
     background-size: cover;
     width: 100vw;
     height: 100vh;
