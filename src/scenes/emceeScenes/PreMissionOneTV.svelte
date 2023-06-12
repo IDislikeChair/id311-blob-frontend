@@ -2,8 +2,6 @@
   import { Socket } from 'socket.io-client';
   import { SOCKET } from '../../stores';
   import { onMount } from 'svelte';
-  import { sound } from 'svelte-sound';
-  import pre_narration from '../../images/level1/pre_narration.mp3';
   import DebugGoToMission from '../DEBUG_go_to_mission.svelte';
 
   /** @type {Socket} */
