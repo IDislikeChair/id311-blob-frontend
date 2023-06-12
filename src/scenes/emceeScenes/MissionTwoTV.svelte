@@ -27,26 +27,15 @@
     socket = value;
   });
 
+  let pairs = [];
   $: onMount(async () => {
     while (!socket) {
       await new Promise((resolve) => setTimeout(resolve, 100));
     }
 
-    socket.on('broadcastPlayerStatus', (players) => {
-      for (let socketID of Object.keys(players)) {
-        if (!players[socketID].alive) continue;
-        if (tilts[players[socketID].pName]) {
-          tilts[players[socketID].pName] += players[socketID].tilts;
-
-          if (tilts[players[socketID].pName] < 0)
-            tilts[players[socketID].pName] = 0;
-          else if (tilts[players[socketID].pName] > width - 2 * playerSize)
-            tilts[players[socketID].pName] = width - 2 * playerSize;
-        } else {
-          tilts[players[socketID].pName] = width / 2;
-        }
-      }
-      //   console.log(tilts);
+    socket.on('broadcastState', (new_pairs) => {
+      console.log(new_pairs);
+      pairs = new_pairs;
     });
   });
 
@@ -85,15 +74,15 @@
       p5.clear();
       p5.noStroke();
 
-      const curPlayers = Object.keys(tilts).length;
-      for (let i = 0; i < curPlayers; i++) {
-        const pRatio = images['players'][i].height / images['players'][i].width;
-        const pName = Object.keys(tilts)[i];
+      for (let pair of pairs) {
+        const pRatio =
+          images['players'][pair.solverNumber ?? 0].height /
+          images['players'][pair.solverNumber ?? 0].width;
 
         p5.imageMode(p5.CORNER);
         p5.image(
-          images['players'][i],
-          tilts[pName],
+          images['players'][pair.solverNumber],
+          width / 2 + (pair.lockState * width) / 100 / 3 - playerSize / 2,
           height / 2,
           playerSize,
           playerSize * pRatio
