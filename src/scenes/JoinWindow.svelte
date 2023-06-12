@@ -31,8 +31,8 @@
     }
   });
 
-  let session_id;
-  let player_name;
+  let sessionId;
+  let playerName;
 
   const join_as_host = () => {
     socket.emit('join_as', { role: 0 });
@@ -50,8 +50,8 @@
   const join_as_player = () => {
     socket.emit('join_as', {
       role: 1,
-      session_id: session_id,
-      player_name: player_name,
+      sessionId: sessionId,
+      playerName: playerName,
     });
 
     socket.on('success_join_as_player', (msg) => {
@@ -69,13 +69,13 @@
     <div class="inputUnit">
       <div class="question">Enter Game Code:</div>
       <div class="answer">
-        <input class="inputbox" bind:value={session_id} />
+        <input class="inputbox" bind:value={sessionId} />
       </div>
     </div>
     <div class="inputUnit">
       <div class="question">Enter Your Name:</div>
       <div class="answer">
-        <input class="inputbox" bind:value={player_name} />
+        <input class="inputbox" bind:value={playerName} />
       </div>
     </div>
     <button class="joinBtn" on:click={join_as_player}> Join Game </button>

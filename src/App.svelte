@@ -26,14 +26,14 @@
 
   let socket;
   let status = 'NONE';
-  let current_scene;
+  let currentScene;
 
   let role;
   ROLE.subscribe((value) => {
     role = value;
   });
 
-  current_scene = JoinWindow;
+  currentScene = JoinWindow;
 
   onMount(async () => {
     const backend = 'https://blob-backend.herokuapp.com';
@@ -57,34 +57,34 @@
 
     socket.on('start_pre_mission', (msg) => {
       console.log('start_pre_mission', msg);
-      switch (msg.mission_id) {
+      switch (msg.missionId) {
         case 1:
           switch (role) {
             case 0:
-              current_scene = PreMissionOneTv;
+              currentScene = PreMissionOneTv;
               break;
             case 1:
-              current_scene = PreMissionOne;
+              currentScene = PreMissionOne;
               break;
           }
           break;
         case 2:
           switch (role) {
             case 0:
-              current_scene = PreMissionTwoTv;
+              currentScene = PreMissionTwoTv;
               break;
             case 1:
-              current_scene = PreMissionTwo;
+              currentScene = PreMissionTwo;
               break;
           }
           break;
         case 3:
           switch (role) {
             case 0:
-              current_scene = PreMissionThreeTv;
+              currentScene = PreMissionThreeTv;
               break;
             case 1:
-              current_scene = PreMissionThree;
+              currentScene = PreMissionThree;
               break;
           }
           break;
@@ -93,34 +93,34 @@
 
     socket.on('start_mission', (msg) => {
       console.log('start_mission', msg);
-      switch (msg.mission_id) {
+      switch (msg.missionId) {
         case 1:
           switch (role) {
             case 0:
-              current_scene = MissionOneTv;
+              currentScene = MissionOneTv;
               break;
             case 1:
-              current_scene = MissionOne;
+              currentScene = MissionOne;
               break;
           }
           break;
         case 2:
           switch (role) {
             case 0:
-              current_scene = MissionTwoTv;
+              currentScene = MissionTwoTv;
               break;
             case 1:
-              current_scene = MissionTwo;
+              currentScene = MissionTwo;
               break;
           }
           break;
         case 3:
           switch (role) {
             case 0:
-              current_scene = MissionThreeTv;
+              currentScene = MissionThreeTv;
               break;
             case 1:
-              current_scene = MissionThree;
+              currentScene = MissionThree;
               break;
           }
           break;
@@ -129,34 +129,34 @@
 
     socket.on('start_post_mission', (msg) => {
       console.log('start_post_mission', msg);
-      switch (msg.mission_id) {
+      switch (msg.missionId) {
         case 1:
           switch (role) {
             case 0:
-              current_scene = PostMissionOneTv;
+              currentScene = PostMissionOneTv;
               break;
             case 1:
-              current_scene = PostMissionOne;
+              currentScene = PostMissionOne;
               break;
           }
           break;
         case 2:
           switch (role) {
             case 0:
-              current_scene = PostMissionTwoTv;
+              currentScene = PostMissionTwoTv;
               break;
             case 1:
-              current_scene = PostMissionTwo;
+              currentScene = PostMissionTwo;
               break;
           }
           break;
         case 3:
           switch (role) {
             case 0:
-              current_scene = PostMissionThreeTv;
+              currentScene = PostMissionThreeTv;
               break;
             case 1:
-              current_scene = PostMissionThree;
+              currentScene = PostMissionThree;
               break;
           }
           break;
@@ -166,7 +166,7 @@
 
   function change_scene(event) {
     console.log(event);
-    current_scene = event.detail.new_scene;
+    currentScene = event.detail.new_scene;
   }
 </script>
 
@@ -177,7 +177,7 @@
   <!-- <Lock {socket} /> -->
   <!-- </div> -->
   <svelte:component
-    this={current_scene}
+    this={currentScene}
     on:changeScene={(e) => change_scene(e)}
   />
 </main>

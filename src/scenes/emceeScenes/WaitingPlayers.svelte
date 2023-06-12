@@ -10,7 +10,7 @@
     socket = value;
   });
 
-  let session_id;
+  let sessionId;
   let pNames = [];
   let playerNum = 0;
 
@@ -22,7 +22,7 @@
     socket.emit('get_session_id');
 
     socket.on('post_session_id', (id) => {
-      session_id = id;
+      sessionId = id;
     });
   });
 
@@ -48,7 +48,7 @@
 <div class="waitingPlayers" style="--innerWidth:{window.innerWidth};">
   <div class="hostInfo">
     <div class="codeTitle">Game Code:</div>
-    <div class="gameCode">{session_id}</div>
+    <div class="gameCode">{sessionId}</div>
     <button class="startGame" on:click={start}>Start Game</button>
   </div>
   <div class="joinedPlayers">
