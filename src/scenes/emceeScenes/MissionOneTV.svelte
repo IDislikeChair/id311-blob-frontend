@@ -1,8 +1,9 @@
 <script>
   import { Socket } from 'socket.io-client';
-  import { SOCKET } from '../../stores';
+  import { PLAYER_NAMES, SOCKET } from '../../stores';
   import { createEventDispatcher, onMount, onDestroy } from 'svelte';
   import DebugGoToMission from '../DEBUG_go_to_mission.svelte';
+  import { get } from 'svelte/store';
   import P5 from 'p5-svelte';
 
   import boat from '../../images/boat.png';
@@ -14,13 +15,19 @@
   import player6 from '../../images/player6.png';
   DebugGoToMission;
 
+  // Rendering-related
   const margin = 10;
-  const width = window.innerWidth - margin,
-    height = window.innerHeight - margin;
+  const width = window.innerWidth - margin;
+  const height = window.innerHeight - margin;
   const playerSize = width / 16,
     boatSize = playerSize * 2.5;
-  const stepAmout = height / 100;
-  const steps = {};
+  const stepAmount = height / 100;
+
+  //  Logic-related
+  /**
+   * @type {number[]}
+   */
+  let stepCounts = [];
   const reachedPlayers = [];
 
   /** @type {Socket} */
@@ -34,10 +41,9 @@
       await new Promise((resolve) => setTimeout(resolve, 100));
     }
 
-    socket.on('broadcastPlayerStatus', (players) => {
-      for (let socketID of Object.keys(players)) {
-        steps[players[socketID].pName] = players[socketID].steps;
-      }
+    socket.on('broadcastStepCounts', (new_player_step_counts) => {
+      console.log(new_player_step_counts);
+      stepCounts = new_player_step_counts;
     });
   });
 
@@ -45,7 +51,7 @@
     socket.off('broadcastPlayerStatus');
   });
 
-  console.log(steps);
+  console.log(stepCounts);
 
   const images = {};
   const sketch = (p5) => {
@@ -73,13 +79,15 @@
       p5.clear();
       p5.noStroke();
 
-      for (let player of Object.keys(steps)) {
-        if (reachedPlayers.includes(player)) continue;
+      for (let player_number = 0; player_number < 6; player_number++) {
+        if (reachedPlayers.includes(player_number)) continue;
         if (
-          height - playerSize - steps[player] * stepAmout <=
+          height - playerSize - stepCounts[player_number] * stepAmount <=
           playerSize * 2.5 * boatRatio + playerSize
-        )
-          reachedPlayers.push(player);
+        ) {
+          reachedPlayers.push(player_number);
+          socket.emit('playersReach', reachedPlayers);
+        }
       }
 
       p5.imageMode(p5.CENTER);
@@ -99,18 +107,19 @@
       p5.drawingContext.setLineDash([width / 100, width / 70]);
       p5.line(0, lineYPos, width, lineYPos);
 
-      const curPlayers = Object.keys(steps).length;
-      for (let i = 0; i < curPlayers; i++) {
-        const pRatio = images['players'][i].height / images['players'][i].width;
-        const pName = Object.keys(steps)[i];
+      for (let player_number = 0; player_number < 6; player_number++) {
+        const pRatio =
+          images['players'][player_number].height /
+          images['players'][player_number].width;
+        const pName = get(PLAYER_NAMES)[player_number];
 
-        if (reachedPlayers.includes(pName)) {
+        if (reachedPlayers.includes(player_number)) {
           let coeffe = -1,
-            rank = reachedPlayers.indexOf(pName);
+            rank = reachedPlayers.indexOf(player_number);
           if (rank % 2) coeffe = 1;
           p5.imageMode(p5.CENTER);
           p5.image(
-            images['players'][i],
+            images['players'][player_number],
             (width / 3) * (Math.floor(rank / 2) + 1) +
               (coeffe * playerSize) / 1.8,
             boatSize * boatRatio * 0.75,
@@ -131,9 +140,9 @@
         } else {
           p5.imageMode(p5.CENTER);
           p5.image(
-            images['players'][i],
-            (width / (curPlayers + 1)) * (i + 1),
-            height - playerSize - steps[pName] * stepAmout,
+            images['players'][player_number],
+            (width / 7) * (player_number + 1),
+            height - playerSize - (stepCounts[player_number] ?? 0) * stepAmount,
             playerSize,
             playerSize * pRatio
           );
@@ -144,8 +153,11 @@
           p5.textSize(playerSize / 2.8);
           p5.text(
             pName,
-            (width / (curPlayers + 1)) * (i + 1),
-            height - playerSize - steps[pName] * stepAmout - playerSize / 2.5
+            (width / 7) * (player_number + 1),
+            height -
+              playerSize -
+              (stepCounts[player_number] ?? 0) * stepAmount -
+              playerSize / 2.5
           );
         }
       }
