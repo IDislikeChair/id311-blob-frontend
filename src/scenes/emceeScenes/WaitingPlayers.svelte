@@ -169,9 +169,9 @@
   }
 
   .joinedPlayers {
-    width: 32vw;
+    width: 30vw;
     height: 65vh;
-    margin-left: 12vw;
+    margin-left: 14vw;
     padding: 5vh;
     background-color: #f4f9fa;
     border: 0.5vh solid #373f3d;
@@ -183,37 +183,37 @@
     height: 10vh;
   }
   .pImage {
-    width: 10vw;
+    width: 7vw;
     height: calc(var(--height) * 0.08 * 1px);
     margin-left: 1vw;
   }
   #player1 {
-    background-image: url('../../images/player1.png');
+    background-image: url('../../images/player1.gif');
     background-size: contain;
     background-repeat: no-repeat;
   }
   #player2 {
-    background-image: url('../../images/player2.png');
+    background-image: url('../../images/player2.gif');
     background-size: contain;
     background-repeat: no-repeat;
   }
   #player3 {
-    background-image: url('../../images/player3.png');
+    background-image: url('../../images/player3.gif');
     background-size: contain;
     background-repeat: no-repeat;
   }
   #player4 {
-    background-image: url('../../images/player4.png');
+    background-image: url('../../images/player4.gif');
     background-size: contain;
     background-repeat: no-repeat;
   }
   #player5 {
-    background-image: url('../../images/player5.png');
+    background-image: url('../../images/player5.gif');
     background-size: contain;
     background-repeat: no-repeat;
   }
   #player6 {
-    background-image: url('../../images/player6.png');
+    background-image: url('../../images/player6.gif');
     background-size: contain;
     background-repeat: no-repeat;
   }
