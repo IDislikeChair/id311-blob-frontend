@@ -49,7 +49,7 @@
 
   const images = {};
   const sketch = (p5) => {
-    let bgRatio, boatRatio, lineYPos;
+    let newFont, boatRatio, lineYPos;
 
     p5.preload = function () {
       images['boat'] = p5.loadImage(boat);
@@ -100,6 +100,10 @@
       p5.line(0, lineYPos, width, lineYPos);
 
       const curPlayers = Object.keys(steps).length;
+      p5.textFont('Courier New');
+      p5.textSize(playerSize / 3.5);
+      p5.textAlign(p5.CENTER);
+      p5.textStyle(p5.BOLD);
       for (let i = 0; i < curPlayers; i++) {
         const pRatio = images['players'][i].height / images['players'][i].width;
         const pName = Object.keys(steps)[i];
@@ -119,9 +123,7 @@
           );
 
           p5.noStroke();
-          p5.fill('#ffffff');
-          p5.textAlign(p5.CENTER);
-          p5.textSize(playerSize / 2.8);
+          p5.fill('#000000');
           p5.text(
             pName,
             (width / 3) * (Math.floor(rank / 2) + 1) +
@@ -139,9 +141,7 @@
           );
 
           p5.noStroke();
-          p5.fill('#ffffff');
-          p5.textAlign(p5.CENTER);
-          p5.textSize(playerSize / 2.8);
+          p5.fill('#000000');
           p5.text(
             pName,
             (width / (curPlayers + 1)) * (i + 1),

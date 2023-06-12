@@ -47,13 +47,7 @@
   <div class="joinedPlayers">
     Joined Players:
     <div class="player">
-      <div class="pImage">
-        <img
-          src="../../images/player1.png"
-          alt="player1"
-          height={window.innerHeight * 0.07}
-        />
-      </div>
+      <div class="pImage" id="player1" style="--height:{window.innerHeight};" />
       <div class="pName">
         {#if playerNum > 0}
           {pNames[0]}
@@ -63,13 +57,7 @@
       </div>
     </div>
     <div class="player">
-      <div class="pImage">
-        <img
-          src="../../images/player2.png"
-          alt="player2"
-          height={window.innerHeight * 0.07}
-        />
-      </div>
+      <div class="pImage" id="player2" style="--height:{window.innerHeight};" />
       <div class="pName">
         {#if playerNum > 1}
           {pNames[1]}
@@ -79,13 +67,7 @@
       </div>
     </div>
     <div class="player">
-      <div class="pImage">
-        <img
-          src="../../images/player3.png"
-          alt="player3"
-          height={window.innerHeight * 0.07}
-        />
-      </div>
+      <div class="pImage" id="player3" style="--height:{window.innerHeight};" />
       <div class="pName">
         {#if playerNum > 2}
           {pNames[2]}
@@ -95,13 +77,7 @@
       </div>
     </div>
     <div class="player">
-      <div class="pImage">
-        <img
-          src="../../images/player4.png"
-          alt="player4"
-          height={window.innerHeight * 0.07}
-        />
-      </div>
+      <div class="pImage" id="player4" style="--height:{window.innerHeight};" />
       <div class="pName">
         {#if playerNum > 3}
           {pNames[3]}
@@ -111,13 +87,7 @@
       </div>
     </div>
     <div class="player">
-      <div class="pImage">
-        <img
-          src="../../images/player5.png"
-          alt="player5"
-          height={window.innerHeight * 0.07}
-        />
-      </div>
+      <div class="pImage" id="player5" style="--height:{window.innerHeight};" />
       <div class="pName">
         {#if playerNum > 4}
           {pNames[4]}
@@ -127,13 +97,7 @@
       </div>
     </div>
     <div class="player">
-      <div class="pImage">
-        <img
-          src="../../images/player6.png"
-          alt="player6"
-          height={window.innerHeight * 0.07}
-        />
-      </div>
+      <div class="pImage" id="player6" style="--height:{window.innerHeight};" />
       <div class="pName">
         {#if playerNum > 5}
           {pNames[5]}
@@ -183,6 +147,7 @@
     height: 8vh;
     display: flex;
     align-items: center;
+    justify-content: center;
 
     margin-top: 6vh;
     border-radius: 0px;
@@ -210,8 +175,38 @@
   }
   .pImage {
     width: 10vw;
-    margin-right: 2vw;
-    text-align: center;
+    height: calc(var(--height) * 0.08 * 1px);
+    margin-left: 1vw;
+  }
+  #player1 {
+    background-image: url('../../images/player1.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+  #player2 {
+    background-image: url('../../images/player2.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+  #player3 {
+    background-image: url('../../images/player3.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+  #player4 {
+    background-image: url('../../images/player4.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+  #player5 {
+    background-image: url('../../images/player5.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+  #player6 {
+    background-image: url('../../images/player6.png');
+    background-size: contain;
+    background-repeat: no-repeat;
   }
   .pName {
     width: 15vw;

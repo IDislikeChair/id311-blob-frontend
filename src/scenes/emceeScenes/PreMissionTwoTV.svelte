@@ -31,8 +31,8 @@
 </script>
 
 <div class="preMissionTwoTVContainer">
-  <div class="card">PreMissionTwoTV {session_id}</div>
-  <button on:click={start}>start</button>
+  <!-- <div class="card">PreMissionTwoTV {session_id}</div> -->
+  <button class="startBtn" on:click={start}>NEXT</button>
   <svelte:component this={DebugGoToMission} />
 </div>
 
@@ -47,5 +47,19 @@
     background-position: center;
     width: 100vw;
     height: 100vh;
+  }
+
+  .startBtn {
+    display: flex;
+    align-items: center;
+    font-size: 2vw;
+
+    position: fixed;
+    right: 16vw;
+    top: 9vw;
+
+    border: 0.3vw solid #373f3d;
+    border-radius: 0px;
+    box-shadow: 0.3vw 0.3vw 0px #373f3d;
   }
 </style>
