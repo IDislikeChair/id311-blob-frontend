@@ -44,7 +44,6 @@
     pairs = new_pairs;
     console.log(pairs);
     socket.emit('gotPairs');
-    socket.off('broadcastState');
 
     for (let i = 0; i < 2; i++) {
       alive.push(pairs[i].solverNumber);
@@ -54,6 +53,7 @@
 
   onDestroy(() => {
     socket.off('broadcastPlayerStatus');
+    socket.off('broadcastState');
   });
 
   console.log(tilts);
