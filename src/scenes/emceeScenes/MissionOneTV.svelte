@@ -7,12 +7,12 @@
   import P5 from 'p5-svelte';
 
   import boat from '../../images/boat.png';
-  import player1 from '../../images/player1.png';
-  import player2 from '../../images/player2.png';
-  import player3 from '../../images/player3.png';
-  import player4 from '../../images/player4.png';
-  import player5 from '../../images/player5.png';
-  import player6 from '../../images/player6.png';
+  import player1 from '../../images/player1.gif';
+  import player2 from '../../images/player2.gif';
+  import player3 from '../../images/player3.gif';
+  import player4 from '../../images/player4.gif';
+  import player5 from '../../images/player5.gif';
+  import player6 from '../../images/player6.gif';
   DebugGoToMission;
 
   // Rendering-related
@@ -55,17 +55,17 @@
 
   const images = {};
   const sketch = (p5) => {
-    let newFont, boatRatio, lineYPos;
+    let boatRatio, lineYPos, pRatio;
 
     p5.preload = function () {
       images['boat'] = p5.loadImage(boat);
       images['players'] = [];
-      images['players'].push(p5.loadImage(player1));
-      images['players'].push(p5.loadImage(player2));
-      images['players'].push(p5.loadImage(player3));
-      images['players'].push(p5.loadImage(player4));
-      images['players'].push(p5.loadImage(player5));
-      images['players'].push(p5.loadImage(player6));
+      images['players'].push(p5.createImg(player1));
+      images['players'].push(p5.createImg(player2));
+      images['players'].push(p5.createImg(player3));
+      images['players'].push(p5.createImg(player4));
+      images['players'].push(p5.createImg(player5));
+      images['players'].push(p5.createImg(player6));
     };
 
     p5.setup = function () {
@@ -108,9 +108,6 @@
       p5.line(0, lineYPos, width, lineYPos);
 
       for (let player_number = 0; player_number < 6; player_number++) {
-        const pRatio =
-          images['players'][player_number].height /
-          images['players'][player_number].width;
         p5.textFont('Courier New');
         p5.textSize(playerSize / 3.5);
         p5.textAlign(p5.CENTER);
@@ -122,13 +119,12 @@
             rank = reachedPlayers.indexOf(player_number);
           if (rank % 2) coeffe = 1;
           p5.imageMode(p5.CENTER);
-          p5.image(
-            images['players'][player_number],
+          images['players'][player_number].size(playerSize, playerSize);
+          images['players'][player_number].position(
             (width / 3) * (Math.floor(rank / 2) + 1) +
-              (coeffe * playerSize) / 1.8,
-            boatSize * boatRatio * 0.75,
-            playerSize,
-            playerSize * pRatio
+              (coeffe * playerSize) / 1.5 -
+              playerSize / 2.5,
+            boatSize * boatRatio * 0.45
           );
 
           p5.noStroke();
@@ -136,17 +132,19 @@
           p5.text(
             pName,
             (width / 3) * (Math.floor(rank / 2) + 1) +
-              (coeffe * playerSize) / 1.8,
+              (coeffe * playerSize) / 1.5 +
+              playerSize / 15,
             boatSize * boatRatio * 0.75 - playerSize / 2.5
           );
         } else {
           p5.imageMode(p5.CENTER);
-          p5.image(
-            images['players'][player_number],
-            (width / 7) * (player_number + 1),
-            height - playerSize - (stepCounts[player_number] ?? 0) * stepAmount,
-            playerSize,
-            playerSize * pRatio
+
+          images['players'][player_number].size(playerSize, playerSize);
+          images['players'][player_number].position(
+            (width / 7) * (player_number + 1) - playerSize / 2,
+            height -
+              playerSize * 1.5 -
+              (stepCounts[player_number] ?? 0) * stepAmount
           );
 
           p5.noStroke();
@@ -155,9 +153,8 @@
             pName,
             (width / 7) * (player_number + 1),
             height -
-              playerSize -
-              (stepCounts[player_number] ?? 0) * stepAmount -
-              playerSize / 2.5
+              playerSize * 1.6 -
+              (stepCounts[player_number] ?? 0) * stepAmount
           );
         }
       }

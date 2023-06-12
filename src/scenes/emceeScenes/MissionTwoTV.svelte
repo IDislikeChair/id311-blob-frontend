@@ -7,12 +7,12 @@
 
   import box_open from '../../images/box_open.png';
   import box_closed from '../../images/box_closed.png';
-  import player1 from '../../images/player1.png';
-  import player2 from '../../images/player2.png';
-  import player3 from '../../images/player3.png';
-  import player4 from '../../images/player4.png';
-  import player5 from '../../images/player5.png';
-  import player6 from '../../images/player6.png';
+  import player1 from '../../images/player1.gif';
+  import player2 from '../../images/player2.gif';
+  import player3 from '../../images/player3.gif';
+  import player4 from '../../images/player4.gif';
+  import player5 from '../../images/player5.gif';
+  import player6 from '../../images/player6.gif';
   DebugGoToMission;
 
   const margin = 10;
