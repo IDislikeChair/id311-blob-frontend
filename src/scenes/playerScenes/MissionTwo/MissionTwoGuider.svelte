@@ -32,6 +32,11 @@
     });
   });
 
+  socket.on('myRolePartner', (partnerNumber) => {
+    myPartner = partnerNumber;
+    pImageID = 'player' + (partnerNumber + 1);
+  });
+
   function doDing() {
     ding = 'Ding!';
     setTimeout(() => {
