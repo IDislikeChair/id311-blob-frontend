@@ -34,7 +34,9 @@
 </script>
 
 <div class="stepClientContainer" style="--innerHeight:{innerHeight};">
-  <div class="clientTitle">Waiting for your role.</div>
+  <div class="clientTitle">
+    Let's watch<br /> other players'<br />fantastic play
+  </div>
 </div>
 
 <style>
