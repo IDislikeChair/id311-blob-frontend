@@ -66,9 +66,8 @@
   }
 
   function send_acceleration() {
-    socket.emit('sendAcceleration', {
-      acceleration: xAcceleration * deviceTiltCoeff,
-    });
+    console.log('AAA');
+    socket.emit('sendAcceleration', xAcceleration * deviceTiltCoeff);
   }
 
   function submit_answer() {
