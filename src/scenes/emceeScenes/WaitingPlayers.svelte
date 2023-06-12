@@ -32,10 +32,12 @@
       pNames.push(players[socketID].pName);
     }
     playerNum = pNames.length;
+
+    PLAYER_NAMES.set(pNames.slice(0, 6));
   });
   const start = () => {
     if (pNames.length >= 6) {
-      PLAYER_NAMES.set(pNames.slice(0, 5));
+      PLAYER_NAMES.set(pNames.slice(0, 6));
     } else {
       const padding = Array(6 - pNames.length).fill('player');
       PLAYER_NAMES.set(pNames.concat(padding));
