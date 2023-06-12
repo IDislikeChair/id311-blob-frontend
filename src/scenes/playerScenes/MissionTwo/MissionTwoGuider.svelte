@@ -1,17 +1,15 @@
 <script>
   import { Socket } from 'socket.io-client';
-  import { SOCKET } from '../../stores';
-  import { createEventDispatcher, onMount } from 'svelte';
-  import MissionTwoSolver from './MissionTwo/MissionTwoSolver.svelte';
-  import MissionTwoGuider from './MissionTwo/MissionTwoGuider.svelte';
-
-  const dispatch = createEventDispatcher();
+  import { SOCKET } from '../../../stores';
+  import { onMount } from 'svelte';
 
   /** @type {Socket} */
   let socket;
   SOCKET.subscribe((value) => {
     socket = value;
   });
+
+  let ding = 'No ding';
 
   const innerHeight = window.innerHeight;
 
@@ -20,21 +18,21 @@
       await new Promise((resolve) => setTimeout(resolve, 100));
     }
 
-    socket.on('missionTwoRole', (roleNumber) => {
-      switch (roleNumber) {
-        case 0:
-          dispatch('changeScene', { new_scene: MissionTwoSolver });
-          break;
-        case 1:
-          dispatch('changeScene', { new_scene: MissionTwoGuider });
-          break;
-      }
+    socket.on('alertAnswer', () => {
+      doDing();
     });
   });
+
+  function doDing() {
+    ding = 'Ding!';
+    setTimeout(() => {
+      ding = 'No ding';
+    }, 1000);
+  }
 </script>
 
 <div class="stepClientContainer" style="--innerHeight:{innerHeight};">
-  <div class="clientTitle">Waiting for your role.</div>
+  <div class="clientTitle">Ding status: {ding}</div>
 </div>
 
 <style>
