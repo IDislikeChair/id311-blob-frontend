@@ -7,6 +7,9 @@
 
   import box_open from '../../images/box_open.png';
   import box_closed from '../../images/box_closed.png';
+  import lock_active from '../../images/level2/lock_active.png';
+  import lock_unlocked from '../../images/level2/lock_unlocked.png';
+  import lock_pending from '../../images/level2/lock_pending.png';
   import player1 from '../../images/sprites/player1_side.gif';
   import player2 from '../../images/sprites/player2_side.gif';
   import player3 from '../../images/sprites/player3_side.gif';
@@ -18,7 +21,9 @@
   const margin = 10;
   const width = window.innerWidth - margin,
     height = window.innerHeight - margin;
-  const playerSize = width / 10;
+  const playerSize = width / 10,
+    boxSize = width / 7,
+    lockSize = width / 17;
   const tilts = {};
 
   /** @type {Socket} */
@@ -32,11 +37,19 @@
     while (!socket) {
       await new Promise((resolve) => setTimeout(resolve, 100));
     }
+  });
 
-    socket.on('broadcastState', (new_pairs) => {
-      console.log(new_pairs);
-      pairs = new_pairs;
-    });
+  let alive = [];
+  socket.on('broadcastState', (new_pairs) => {
+    pairs = new_pairs;
+    console.log(pairs);
+    socket.emit('gotPairs');
+    socket.off('broadcastState');
+
+    for (let i = 0; i < 2; i++) {
+      alive.push(pairs[i].solverNumber);
+      alive.push(pairs[i].guiderNumber);
+    }
   });
 
   onDestroy(() => {
@@ -53,13 +66,19 @@
       images['box'] = {};
       images['box']['open'] = p5.loadImage(box_open);
       images['box']['closed'] = p5.loadImage(box_closed);
+
+      images['lock'] = {};
+      images['lock']['active'] = p5.loadImage(lock_active);
+      images['lock']['unlocked'] = p5.loadImage(lock_unlocked);
+      images['lock']['pending'] = p5.loadImage(lock_pending);
+
       images['players'] = [];
-      images['players'].push(p5.loadImage(player1));
-      images['players'].push(p5.loadImage(player2));
-      images['players'].push(p5.loadImage(player3));
-      images['players'].push(p5.loadImage(player4));
-      images['players'].push(p5.loadImage(player5));
-      images['players'].push(p5.loadImage(player6));
+      images['players'].push(p5.createImg(player1));
+      images['players'].push(p5.createImg(player2));
+      images['players'].push(p5.createImg(player3));
+      images['players'].push(p5.createImg(player4));
+      images['players'].push(p5.createImg(player5));
+      images['players'].push(p5.createImg(player6));
     };
 
     p5.setup = function () {
@@ -73,20 +92,52 @@
     p5.draw = function () {
       p5.clear();
       p5.noStroke();
+      p5.imageMode(p5.CENTER);
 
-      for (let pair of pairs) {
-        const pRatio =
-          images['players'][pair.solverNumber ?? 0].height /
-          images['players'][pair.solverNumber ?? 0].width;
+      if (pairs.length == 0) return;
 
-        p5.imageMode(p5.CORNER);
-        p5.image(
-          images['players'][pair.solverNumber],
-          width / 2 + (pair.lockState * width) / 100 / 3 - playerSize / 2,
-          height / 2,
-          playerSize,
-          playerSize * pRatio
+      for (let i = 0; i < 2; i++) {
+        images['players'][pairs[i].solverNumber].size(playerSize, playerSize);
+        images['players'][pairs[i].solverNumber].position(
+          (width / 2) * i + playerSize + playerSize / 2,
+          height * 0.7
         );
+
+        images['players'][pairs[i].guiderNumber].size(playerSize, playerSize);
+        images['players'][pairs[i].guiderNumber].position(
+          (width / 2) * i + playerSize - playerSize / 2,
+          height * 0.7
+        );
+
+        p5.image(
+          images['box']['closed'],
+          (width / 2) * i + playerSize * 3.5,
+          height * 0.7,
+          boxSize,
+          boxSize * boxClosedRatio
+        );
+
+        p5.stroke('#787878');
+        p5.strokeWeight(height / 80);
+        p5.line(
+          (width / 2) * i + playerSize,
+          height * 0.5,
+          (width / 2) * i + 3.5 * playerSize,
+          height * 0.5
+        );
+
+        p5.image(
+          images['lock']['active'],
+          (width / 2) * i +
+            playerSize +
+            (pairs[i].lockState / 100) * 2.5 * playerSize,
+          height * 0.5,
+          lockSize,
+          lockSize
+        );
+      }
+      for (let i = 0; i < 6; i++) {
+        if (!alive.includes(i)) images['players'][i].hide();
       }
     };
   };
