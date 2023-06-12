@@ -2,7 +2,6 @@
   import { Socket } from 'socket.io-client';
   import { PLAYER_NUMBER, SOCKET } from '../../stores';
   import { createEventDispatcher, onMount, onDestroy } from 'svelte';
-  import PreMissionOne from './PreMissionOne.svelte';
 
   const dispatch = createEventDispatcher();
 
@@ -124,7 +123,7 @@
   .readyCmd {
     font-size: 4vh;
     line-height: 4vh;
-    color: #153741;
+    color: #2d5865;
     font-weight: bolder;
   }
 </style>
