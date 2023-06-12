@@ -1,6 +1,6 @@
 <script>
   import { Socket } from 'socket.io-client';
-  import { SOCKET } from '../../stores';
+  import { PLAYER_NAMES, SOCKET } from '../../stores';
   import { onMount } from 'svelte';
   import DebugGoToMission from '../DEBUG_go_to_mission.svelte';
 
@@ -34,6 +34,13 @@
     playerNum = pNames.length;
   });
   const start = () => {
+    if (pNames.length >= 6) {
+      PLAYER_NAMES.set(pNames.slice(0, 5));
+    } else {
+      const padding = Array(6 - pNames.length).fill('player');
+      PLAYER_NAMES.set(pNames.concat(padding));
+    }
+
     socket.emit('on_next');
   };
 </script>
