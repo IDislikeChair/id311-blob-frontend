@@ -7,12 +7,12 @@
   import P5 from 'p5-svelte';
 
   import boat from '../../images/boat.png';
-  import player1 from '../../images/player1.gif';
-  import player2 from '../../images/player2.gif';
-  import player3 from '../../images/player3.gif';
-  import player4 from '../../images/player4.gif';
-  import player5 from '../../images/player5.gif';
-  import player6 from '../../images/player6.gif';
+  import player1 from '../../images/sprites/player1_back.gif';
+  import player2 from '../../images/sprites/player2_back.gif';
+  import player3 from '../../images/sprites/player3_back.gif';
+  import player4 from '../../images/sprites/player4_back.gif';
+  import player5 from '../../images/sprites/player5_back.gif';
+  import player6 from '../../images/sprites/player6_back.gif';
   DebugGoToMission;
 
   // Rendering-related

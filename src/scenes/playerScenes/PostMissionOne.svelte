@@ -111,32 +111,32 @@
   }
 
   #player1 {
-    background-image: url('../../images/player1.gif');
+    background-image: url('../../images/sprites/player1.gif');
     background-size: contain;
     background-repeat: no-repeat;
   }
   #player2 {
-    background-image: url('../../images/player2.gif');
+    background-image: url('../../images/sprites/player2.gif');
     background-size: contain;
     background-repeat: no-repeat;
   }
   #player3 {
-    background-image: url('../../images/player3.gif');
+    background-image: url('../../images/sprites/player3.gif');
     background-size: contain;
     background-repeat: no-repeat;
   }
   #player4 {
-    background-image: url('../../images/player4.gif');
+    background-image: url('../../images/sprites/player4.gif');
     background-size: contain;
     background-repeat: no-repeat;
   }
   #player5 {
-    background-image: url('../../images/player5.gif');
+    background-image: url('../../images/sprites/player5.gif');
     background-size: contain;
     background-repeat: no-repeat;
   }
   #player6 {
-    background-image: url('../../images/player6.gif');
+    background-image: url('../../images/sprites/player6.gif');
     background-size: contain;
     background-repeat: no-repeat;
   }
