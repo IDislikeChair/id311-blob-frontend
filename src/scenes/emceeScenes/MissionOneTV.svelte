@@ -86,8 +86,8 @@
           playerSize * 2.5 * boatRatio + playerSize
         ) {
           reachedPlayers.push(player_number);
-          socket.emit('playersReach', reachedPlayers);
         }
+        socket.emit('playersReach', reachedPlayers);
       }
 
       p5.imageMode(p5.CENTER);
