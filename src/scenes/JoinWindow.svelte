@@ -2,6 +2,7 @@
   import { createEventDispatcher, onMount } from 'svelte';
   import { PLAYER_NUMBER, ROLE, SOCKET } from '../stores';
   import WaitingPlayers from './emceeScenes/WaitingPlayers.svelte';
+  import ReadyBeforeStart from './playerScenes/ReadyBeforeStart.svelte';
   import PreMissionOneTv from './emceeScenes/PreMissionOneTV.svelte';
   import PreMissionOne from './playerScenes/PreMissionOne.svelte';
   import { Socket } from 'socket.io-client';
@@ -55,10 +56,9 @@
 
     socket.on('success_join_as_player', (msg) => {
       ROLE.set(1);
-      console.log('here');
       PLAYER_NUMBER.set(msg.player_number);
       dispatch('changeScene', {
-        new_scene: PreMissionOne,
+        new_scene: ReadyBeforeStart,
       });
     });
   };
@@ -67,18 +67,18 @@
 <div>
   <div class="joining">
     <div class="inputUnit">
-      <div class="question">Game Code:</div>
+      <div class="question">Enter Game Code:</div>
       <div class="answer">
         <input class="inputbox" bind:value={session_id} />
       </div>
     </div>
     <div class="inputUnit">
-      <div class="question">User Name:</div>
+      <div class="question">Enter Your Name:</div>
       <div class="answer">
         <input class="inputbox" bind:value={player_name} />
       </div>
     </div>
-    <button class="joinBtn" on:click={join_as_player}> Join as player </button>
+    <button class="joinBtn" on:click={join_as_player}> Join Game </button>
   </div>
 </div>
 
@@ -98,7 +98,9 @@
     margin-bottom: 4vh;
   }
   .question {
-    font-size: 3vh;
+    font-size: 3.5vh;
+    color: white;
+    font-weight: bolder;
   }
   .inputbox {
     width: 50vw;
@@ -107,14 +109,14 @@
     background-color: transparent;
     border: none;
     border-bottom: 0.5vh solid #373f3d;
+    color: white;
+    font-weight: bolder;
   }
   .joinBtn {
     width: 50vw;
-    height: 6vh;
-    font-size: 3vh;
+    height: 7vh;
+    font-size: 3.5vh;
     margin-top: 5vh;
-
-    background-color: #f4f9fa;
 
     border: 0.5vh solid #373f3d;
     border-radius: 0px;
@@ -122,8 +124,9 @@
 
     display: flex;
     align-items: center;
-    text-align: center;
+    justify-content: center;
 
-    color: rgb(100, 166, 8);
+    background-color: rgb(132, 216, 15);
+    color: white;
   }
 </style>

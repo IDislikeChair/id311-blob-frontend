@@ -27,6 +27,12 @@
     while (!socket) {
       await new Promise((resolve) => setTimeout(resolve, 100));
     }
+
+    socket.on('start_pre_mission', () => {
+      dispatch('changeScene', {
+        new_scene: PreMissionOne,
+      });
+    });
   });
 
   socket.on('broadcastPlayerStatus', (players) => {
@@ -37,7 +43,7 @@
   });
 </script>
 
-<div class="preMissionOneContainer" style="--innerHeight:{innerHeight};">
+<div class="readyClientContainer" style="--innerHeight:{innerHeight};">
   <div class="readyTitle">You are ready!</div>
   {#if updated}
     <div class="myCharacter">
@@ -45,25 +51,25 @@
       <div class="pImage" id={imageID} />
     </div>
   {/if}
-  <div class="readyCmd">Press NEXT on the TV<br /> to continue ...</div>
+  <div class="readyCmd">Wait for the<br />game to start ...</div>
 </div>
 
 <style>
-  .preMissionOneContainer {
+  .readyClientContainer {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
 
-    background-image: url('../../images/mission1_background.png');
+    background-image: url('../../images/join_background.png');
     background-size: cover;
     width: 100vw;
     height: calc(var(--innerHeight) * 1px);
   }
   .readyTitle {
     font-size: 5vh;
-    color: transparent;
+    color: white;
     font-weight: bolder;
   }
 
@@ -73,9 +79,9 @@
     padding: 5vh;
     margin-top: 3vh;
     margin-bottom: 14vh;
-    background-color: #f1f8f9;
-    border: 0.5vh solid #1a748e;
-    box-shadow: 1.5vh 1.5vh 0px #1a748e;
+    background-color: #ecf1e5;
+    border: 0.5vh solid #3c6b1f;
+    box-shadow: 1.5vh 1.5vh 0px #7fad71;
     font-size: 5vh;
 
     display: flex;
@@ -124,7 +130,7 @@
   .readyCmd {
     font-size: 4vh;
     line-height: 4vh;
-    color: #153741;
+    color: white;
     font-weight: bolder;
   }
 </style>

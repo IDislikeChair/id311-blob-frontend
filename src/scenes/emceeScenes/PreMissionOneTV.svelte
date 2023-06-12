@@ -51,14 +51,14 @@
   .startBtn {
     display: flex;
     align-items: center;
-    font-size: 3vh;
+    font-size: 2vw;
 
     position: fixed;
-    right: 15vw;
-    bottom: 18vh;
+    right: 16vw;
+    top: 9vw;
 
-    border: 0.5vh solid #373f3d;
+    border: 0.3vw solid #373f3d;
     border-radius: 0px;
-    box-shadow: 0.5vh 0.5vh 0px #373f3d;
+    box-shadow: 0.3vw 0.3vw 0px #373f3d;
   }
 </style>
