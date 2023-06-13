@@ -1,7 +1,10 @@
 <script>
   import { Socket } from 'socket.io-client';
   import { SOCKET } from '../../../stores';
-  import { onMount } from 'svelte';
+  import { createEventDispatcher, onMount } from 'svelte';
+  import PostMissionTwo from '../PostMissionTwo.svelte';
+
+  const dispatch = createEventDispatcher();
 
   /** @type {Socket} */
   let socket;
@@ -35,6 +38,12 @@
   socket.on('myRolePartner', (partnerNumber) => {
     myPartner = partnerNumber;
     pImageID = 'player' + (partnerNumber + 1);
+  });
+
+  socket.on('start_post_mission', () => {
+    dispatch('changeScene', {
+      new_scene: PostMissionTwo,
+    });
   });
 
   function doDing() {

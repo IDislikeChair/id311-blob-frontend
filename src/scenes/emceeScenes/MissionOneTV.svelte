@@ -21,7 +21,7 @@
   const height = window.innerHeight - margin;
   const playerSize = width / 16,
     boatSize = playerSize * 2.5;
-  const stepAmount = height / 500;
+  const stepAmount = height / 200;
 
   //  Logic-related
   /**

@@ -31,9 +31,9 @@
 </script>
 
 <div class="preMissionThreeTVContainer">
-  <!-- <div class="card">PreMissionThreeTV {session_id}</div> -->
-  <button class="startBtn" on:click={start}>NEXT</button>
-  <svelte:component this={DebugGoToMission} />
+  <div class="missionCard" />
+  <div class="nextBtn" on:click={start} />
+  <!-- <svelte:component this={DebugGoToMission} /> -->
 </div>
 
 <style>
@@ -41,25 +41,30 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
 
-    background-image: url('../../images/mission3_pre.png');
+    background-image: url('../../images/mission3_background.png');
     background-size: cover;
     background-position: center;
     width: 100vw;
     height: 100vh;
   }
-
-  .startBtn {
-    display: flex;
-    align-items: center;
-    font-size: 2vw;
+  .missionCard {
+    background-image: url('../../images/level3/tv_instructions_card.png');
+    background-size: cover;
+    background-position: center;
+    width: calc(1vw * 15 * 5);
+    height: calc(1vw * 9 * 5);
+  }
+  .nextBtn {
+    background-image: url('../../images/level3/tv_next.png');
+    background-size: cover;
+    background-position: center;
+    width: calc(1vw * 6 * 4);
+    height: calc(1vw * 1.5 * 4);
 
     position: fixed;
-    right: 16vw;
-    top: 9vw;
-
-    border: 0.3vw solid #373f3d;
-    border-radius: 0px;
-    box-shadow: 0.3vw 0.3vw 0px #373f3d;
+    right: calc(1vw * 5 * 16 / 25);
+    bottom: calc(1vw * 5 * 9 / 25);
   }
 </style>
