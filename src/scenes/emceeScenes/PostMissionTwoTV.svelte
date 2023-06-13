@@ -22,7 +22,7 @@
     socket.emit('get_session_id');
 
     socket.on('post_session_id', (id) => {
-      console.log(id);
+      // console.log(id);
       session_id = id;
     });
 
