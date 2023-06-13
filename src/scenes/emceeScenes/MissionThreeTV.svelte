@@ -51,6 +51,7 @@
 
   onDestroy(() => {
     socket.off('broadcastPlayerStatus');
+    socket.off('broadcastState');
   });
 
   const images = {};

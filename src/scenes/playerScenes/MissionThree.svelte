@@ -93,8 +93,8 @@
   }
 </script>
 
-<div class="stepClientContainer" style="--innerHeight:{innerHeight};">
-  {#if updated == true && totPlayers[player_number].alive == true}
+<div class="shotClientContainer" style="--innerHeight:{innerHeight};">
+  {#if updated == true && totPlayers[player_number].alive == 0}
     <div class="clientTitle-survivor">
       Control the flashlight <br /> by tilting the device<br /><br />Tap the box
       to shoot
@@ -110,7 +110,7 @@
 </div>
 
 <style>
-  .stepClientContainer {
+  .shotClientContainer {
     display: flex;
     flex-direction: column;
     align-items: center;
