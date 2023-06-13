@@ -233,6 +233,11 @@
 
 <div class="missionTwoTVContainer">
   <P5 {sketch} />
+  <button
+    on:click={() => {
+      socket.emit('on_next');
+    }}
+  />
 </div>
 
 <style>

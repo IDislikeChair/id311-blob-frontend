@@ -164,6 +164,11 @@
 
 <div class="missionOneTVContainer">
   <P5 {sketch} />
+  <button
+    on:click={() => {
+      socket.emit('on_next');
+    }}
+  />
 </div>
 
 <style>
