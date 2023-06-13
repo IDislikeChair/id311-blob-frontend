@@ -30,8 +30,8 @@
       alive = [];
       dead = [];
       for (let player of players) {
-        if (player['alive']) alive.push(player);
-        else dead.push(player);
+        if (player['alive'] == 0) alive.push(player);
+        else if (player['alive'] == 2) dead.push(player);
       }
     });
   });

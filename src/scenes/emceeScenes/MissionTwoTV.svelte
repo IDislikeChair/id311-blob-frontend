@@ -46,12 +46,11 @@
 
   socket.on('broadcastState', (new_pairs) => {
     pairs = new_pairs;
-    console.log(pairs);
     socket.emit('gotPairs');
 
     for (let i = 0; i < 2; i++) {
-      alive.push(pairs[i].solverNumber);
-      alive.push(pairs[i].guiderNumber);
+      alive.push(pairs[i]?.solverNumber);
+      alive.push(pairs[i]?.guiderNumber);
     }
   });
 
@@ -112,14 +111,14 @@
       if (pairs.length == 0) return;
 
       for (let i = 0; i < 2; i++) {
-        images['players'][pairs[i].solverNumber].size(playerSize, playerSize);
-        images['players'][pairs[i].solverNumber].position(
+        images['players'][pairs[i]?.solverNumber]?.size(playerSize, playerSize);
+        images['players'][pairs[i]?.solverNumber]?.position(
           (width / 2) * i + playerSize + playerSize / 2,
           height * 0.7
         );
 
-        images['players'][pairs[i].guiderNumber].size(playerSize, playerSize);
-        images['players'][pairs[i].guiderNumber].position(
+        images['players'][pairs[i]?.guiderNumber]?.size(playerSize, playerSize);
+        images['players'][pairs[i]?.guiderNumber]?.position(
           (width / 2) * i + playerSize - playerSize / 2,
           height * 0.7
         );

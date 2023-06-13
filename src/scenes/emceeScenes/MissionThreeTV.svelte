@@ -38,6 +38,17 @@
     });
   });
 
+  let alive = [];
+  let targets = {};
+
+  socket.on('broadcastState', (new_targets) => {
+    targets = new_targets;
+    alive = Object.keys(targets);
+    console.log('broadcastState mission3', targets);
+  });
+
+  console.log('HERE mission3');
+
   onDestroy(() => {
     socket.off('broadcastPlayerStatus');
   });
@@ -46,12 +57,12 @@
   const sketch = (p5) => {
     p5.preload = function () {
       images['players'] = [];
-      images['players'].push(p5.loadImage(player1));
-      images['players'].push(p5.loadImage(player2));
-      images['players'].push(p5.loadImage(player3));
-      images['players'].push(p5.loadImage(player4));
-      images['players'].push(p5.loadImage(player5));
-      images['players'].push(p5.loadImage(player6));
+      images['players'].push(p5.createImg(player1));
+      images['players'].push(p5.createImg(player2));
+      images['players'].push(p5.createImg(player3));
+      images['players'].push(p5.createImg(player4));
+      images['players'].push(p5.createImg(player5));
+      images['players'].push(p5.createImg(player6));
     };
 
     p5.setup = function () {
