@@ -17,7 +17,8 @@
   let xAcceleration = 0,
     yAcceleration = 0;
   let tiltInterval;
-  let deviceTiltCoeff = 1;
+  let deviceTiltCoeffX = 1;
+  let deviceTiltCoeffY = 1;
 
   let player_number;
   PLAYER_NUMBER.subscribe((value) => {
@@ -36,9 +37,10 @@
 
     if (navigator.userAgent.match(/Android/i)) {
       device = 'Android';
-      deviceTiltCoeff = -1;
+      deviceTiltCoeffX = -1;
     } else if (navigator.userAgent.match(/iPhone/i)) {
       device = 'iPhone';
+      deviceTiltCoeffY = -1;
     } else {
       device = 'We only support Android and iOS(iPhone)';
     }
@@ -83,8 +85,8 @@
   function send_acceleration() {
     socket.emit(
       'sendAcceleration',
-      xAcceleration * deviceTiltCoeff,
-      yAcceleration
+      xAcceleration * deviceTiltCoeffX,
+      yAcceleration * deviceTiltCoeffY
     );
   }
 
