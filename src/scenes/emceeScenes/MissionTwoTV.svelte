@@ -44,7 +44,7 @@
   let alive = [];
   let saved_unlock_positions = [[], []];
 
-  socket.on('broadcastState', (new_pairs) => {
+  socket.on('broadcastMission2State', (new_pairs) => {
     pairs = new_pairs;
     socket.emit('gotPairs');
 
@@ -64,7 +64,7 @@
 
   onDestroy(() => {
     socket.off('broadcastPlayerStatus');
-    socket.off('broadcastState');
+    socket.off('broadcastMission2State');
   });
 
   console.log(tilts);
