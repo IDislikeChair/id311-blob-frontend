@@ -42,9 +42,11 @@
   let targets = {};
 
   socket.on('broadcastState', (new_targets) => {
+    if (Array.isArray(new_targets)) return;
     targets = new_targets;
-    alive = Object.keys(targets).map((str) => Number(str));
-    console.log('broadcastState mission3', targets);
+    if (alive.length == 0)
+      alive = Object.keys(targets).map((str) => Number(str));
+    // console.log('broadcastState mission3', new_targets);
   });
 
   onDestroy(() => {
@@ -71,6 +73,7 @@
 
     p5.draw = function () {
       p5.clear();
+      if (alive.length == 0) return;
 
       const halfScreen = p5.createGraphics(width / 2, height);
       halfScreen.fill('rgba(0,0,0,0.85)');
@@ -103,8 +106,8 @@
       mask2.erase();
       mask2.noStroke();
       mask2.ellipse(
-        (mask.width / 100) * targets[alive[1]]['x'],
-        (mask.height / 100) * targets[alive[2]]['y'],
+        (mask2.width / 100) * targets[alive[1]]['x'],
+        (mask2.height / 100) * targets[alive[1]]['y'],
         mask2.width / 5,
         mask2.width / 5
       );
