@@ -16,6 +16,8 @@
   import player4 from '../../images/sprites/player4_side.gif';
   import player5 from '../../images/sprites/player5_side.gif';
   import player6 from '../../images/sprites/player6_side.gif';
+  import heart_healthy from '../../images/level2/heart_healthy.png';
+  import heart_dead from '../../images/level2/heart_dead.png';
   DebugGoToMission;
 
   const margin = 10;
@@ -40,6 +42,8 @@
   });
 
   let alive = [];
+  let saved_unlock_positions = [[], []];
+
   socket.on('broadcastState', (new_pairs) => {
     pairs = new_pairs;
     console.log(pairs);
@@ -49,6 +53,14 @@
       alive.push(pairs[i].solverNumber);
       alive.push(pairs[i].guiderNumber);
     }
+  });
+
+  socket.on('submitAnswerSuccess', (pairNumber) => {
+    saved_unlock_positions[pairNumber].push(pairs[pairNumber].lockState);
+  });
+
+  socket.on('submitAnswerFail', (pairNumber) => {
+    // TODO: give feedback to the player
   });
 
   onDestroy(() => {
@@ -78,6 +90,10 @@
       images['players'].push(p5.createImg(player4));
       images['players'].push(p5.createImg(player5));
       images['players'].push(p5.createImg(player6));
+
+      images['heart'] = {};
+      images['heart']['healthy'] = p5.loadImage(heart_healthy);
+      images['heart']['dead'] = p5.loadImage(heart_dead);
     };
 
     p5.setup = function () {
@@ -116,6 +132,33 @@
           boxSize * boxClosedRatio
         );
 
+        for (
+          let unlockNumber = 0;
+          unlockNumber < pairs[i].score;
+          unlockNumber++
+        ) {
+          p5.stroke('#787878');
+          p5.strokeWeight(height / 80);
+          p5.line(
+            (width / 2) * i + playerSize,
+            height * 0.5 - 1.2 * lockSize * (unlockNumber + 1),
+            (width / 2) * i + 3.5 * playerSize,
+            height * 0.5 - 1.2 * lockSize * (unlockNumber + 1)
+          );
+
+          p5.image(
+            images['lock']['unlocked'],
+            (width / 2) * i +
+              playerSize +
+              (saved_unlock_positions[i][unlockNumber] / 100) *
+                2.5 *
+                playerSize,
+            height * 0.5 - 1.2 * lockSize * (unlockNumber + 1),
+            lockSize,
+            lockSize
+          );
+        }
+
         p5.stroke('#787878');
         p5.strokeWeight(height / 80);
         p5.line(
@@ -134,7 +177,28 @@
           lockSize,
           lockSize
         );
+
+        for (let lifeNumber = 0; lifeNumber < pairs[i].lifeLeft; lifeNumber++) {
+          p5.image(
+            images['heart']['healthy'],
+            (width / 2) * i + 2.25 * playerSize + (lifeNumber - 2) * lockSize,
+            height * 0.95,
+            1.5 * lockSize,
+            1.5 * lockSize
+          );
+        }
+
+        for (let lifeNumber = pairs[i].lifeLeft; lifeNumber < 5; lifeNumber++) {
+          p5.image(
+            images['heart']['dead'],
+            (width / 2) * i + 2.25 * playerSize + (lifeNumber - 2) * lockSize,
+            height * 0.95,
+            1.5 * lockSize,
+            1.5 * lockSize
+          );
+        }
       }
+
       for (let i = 0; i < 6; i++) {
         if (!alive.includes(i)) images['players'][i].hide();
       }
