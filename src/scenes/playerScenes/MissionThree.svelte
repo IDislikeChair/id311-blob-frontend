@@ -2,7 +2,7 @@
   import { Socket } from 'socket.io-client';
   import { PLAYER_NUMBER, SOCKET } from '../../stores';
   import { createEventDispatcher, onMount, onDestroy } from 'svelte';
-  import PostMissionOne from './PostMissionOne.svelte';
+  import PostMissionThree from './PostMissionThree.svelte';
 
   const dispatch = createEventDispatcher();
 
@@ -12,72 +12,101 @@
     socket = value;
   });
 
+  let status = 'Hello';
+  let device = 'Device not identified';
+  let xAcceleration = 0,
+    yAcceleration = 0;
+  let tiltInterval;
+  let deviceTiltCoeff = 1;
+
   let player_number;
   PLAYER_NUMBER.subscribe((value) => {
     player_number = value;
   });
 
-  let result;
-  let steps = 0;
-  let isLeft = true;
-
   const innerHeight = window.innerHeight;
+
+  let updated = false,
+    totPlayers = [];
 
   $: onMount(async () => {
     while (!socket) {
       await new Promise((resolve) => setTimeout(resolve, 100));
     }
 
-    socket.on('get_mission_result', () => {
-      socket.emit('post_mission_result', {
-        player_number: player_number,
-        stepCount: result,
-      });
-    });
+    if (navigator.userAgent.match(/Android/i)) {
+      device = 'Android';
+      deviceTiltCoeff = -1;
+    } else if (navigator.userAgent.match(/iPhone/i)) {
+      device = 'iPhone';
+    } else {
+      device = 'We only support Android and iOS(iPhone)';
+    }
 
-    socket.on('start_post_mission', () => {
-      dispatch('changeScene', {
-        new_scene: PostMissionOne,
-      });
-    });
+    // Check if the device supports the accelerometer
+    if (window.DeviceMotionEvent) {
+      // Register the event listener for device motion
+      window.addEventListener('devicemotion', handleMotionEvent);
+      // Start the tilt detection interval
+      tiltInterval = setInterval(send_acceleration, 200);
+    } else if (window.DeviceOrientationEvent) {
+      window.addEventListener('deviceorientation', handleMotionEvent);
+      tiltInterval = setInterval(send_acceleration, 200);
+    } else {
+      // Display an error message if the device does not support the accelerometer
+      status = 'Accelerometer not supported';
+    }
 
-    socket.on('getMyStepCounts', (stepCount) => {
-      steps = stepCount;
+    socket.on('broadcastPlayerStatus', (players) => {
+      updated = true;
+      totPlayers = players;
     });
   });
 
-  const stepOnLeft = (event) => {
-    event.preventDefault();
-    if (isLeft) {
-      steps += 1;
-      socket.emit('stepOn', steps);
-      isLeft = false;
-    }
-  };
-  const stepOnRight = (event) => {
-    event.preventDefault();
-    if (!isLeft) {
-      steps += 1;
-      socket.emit('stepOn', steps);
-      isLeft = true;
-    }
-  };
+  socket.on('start_post_mission', () => {
+    dispatch('changeScene', {
+      new_scene: PostMissionThree,
+    });
+  });
+
+  onDestroy(() => {
+    // Clean up event listeners and intervals
+    window.removeEventListener('devicemotion', handleMotionEvent);
+    clearInterval(tiltInterval);
+  });
+
+  function handleMotionEvent(event) {
+    xAcceleration = event.accelerationIncludingGravity.x;
+    yAcceleration = event.accelerationIncludingGravity.y;
+  }
+
+  function send_acceleration() {
+    socket.emit(
+      'sendAcceleration',
+      xAcceleration * deviceTiltCoeff,
+      yAcceleration
+    );
+  }
+
+  function submit_shot() {
+    socket.emit('submitShot');
+  }
 </script>
 
 <div class="stepClientContainer" style="--innerHeight:{innerHeight};">
-  <div class="clientTitle">Tap the boxes<br /> alternately<br /> to run</div>
-  <div class="stepper">
-    <div
-      class="leftbox"
-      id={isLeft ? 'thisTime' : 'nextTime'}
-      on:touchstart={stepOnLeft}
-    />
-    <div
-      class="rightbox"
-      id={isLeft ? 'nextTime' : 'thisTime'}
-      on:touchstart={stepOnRight}
-    />
-  </div>
+  {#if updated == true && totPlayers[player_number].alive == true}
+    <div class="clientTitle-survivor">
+      Control the flashlight <br /> by tilting the device<br /><br />Tap the box
+      to shoot
+    </div>
+    <div class="shootBox" on:click={submit_shot}>
+      <div class="crossHair" />
+    </div>
+  {:else}
+    <div class="clientTitle-eliminated">
+      Let's watch<br /> other players'<br />fantastic play
+    </div>
+  {/if}
 </div>
 
 <style>
@@ -92,36 +121,39 @@
     width: 100vw;
     height: calc(var(--innerHeight) * 1px);
   }
-  .clientTitle {
+  .clientTitle-survivor {
+    text-align: center;
+    width: 70vw;
+    font-size: 8vw;
+    line-height: 8vw;
+
+    margin-bottom: 8vh;
+    color: #e9e9e9;
+  }
+  .clientTitle-eliminated {
     text-align: center;
     width: 70vw;
     font-size: 10vw;
     line-height: 10vw;
 
     margin-bottom: 5vh;
+    color: #e9e9e9;
   }
-  .stepper {
-    display: flex;
-  }
-  .leftbox {
-    width: 35vw;
-    height: 55vh;
-    border: 1vh solid #ffffff;
-    border-right-width: calc(1vh / 2);
-  }
-  .rightbox {
-    width: 35vw;
-    height: 55vh;
-    border: 1vh solid #ffffff;
-    border-left-width: calc(1vh / 2);
-  }
+  .shootBox {
+    width: 70vw;
+    height: 70vw;
+    background-color: #635e94;
+    border: 2vw solid #000000;
 
-  #thisTime {
-    background-color: #ffca5f;
-    opacity: 0.9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
-  #nextTime {
-    background-color: #e6e6e6;
-    opacity: 0.9;
+  .crossHair {
+    width: 20vw;
+    height: 20vw;
+
+    background-image: url('../../images/level3/crosshair.png');
+    background-size: cover;
   }
 </style>

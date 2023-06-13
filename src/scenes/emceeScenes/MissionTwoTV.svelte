@@ -127,7 +127,7 @@
         p5.image(
           images['box']['closed'],
           (width / 2) * i + playerSize * 3.5,
-          height * 0.7,
+          height * 0.72,
           boxSize,
           boxSize * boxClosedRatio
         );
@@ -137,13 +137,13 @@
           unlockNumber < pairs[i].score;
           unlockNumber++
         ) {
-          p5.stroke('#787878');
+          p5.stroke('#3D3D3D');
           p5.strokeWeight(height / 80);
           p5.line(
             (width / 2) * i + playerSize,
-            height * 0.5 - 1.2 * lockSize * (unlockNumber + 1),
+            height * 0.55 - 1.2 * lockSize * (unlockNumber + 1),
             (width / 2) * i + 3.5 * playerSize,
-            height * 0.5 - 1.2 * lockSize * (unlockNumber + 1)
+            height * 0.55 - 1.2 * lockSize * (unlockNumber + 1)
           );
 
           p5.image(
@@ -153,19 +153,19 @@
               (saved_unlock_positions[i][unlockNumber] / 100) *
                 2.5 *
                 playerSize,
-            height * 0.5 - 1.2 * lockSize * (unlockNumber + 1),
+            height * 0.55 - 1.2 * lockSize * (unlockNumber + 1),
             lockSize,
             lockSize
           );
         }
 
-        p5.stroke('#787878');
+        p5.stroke('#3D3D3D');
         p5.strokeWeight(height / 80);
         p5.line(
           (width / 2) * i + playerSize,
-          height * 0.5,
+          height * 0.55,
           (width / 2) * i + 3.5 * playerSize,
-          height * 0.5
+          height * 0.55
         );
 
         p5.image(
@@ -173,16 +173,38 @@
           (width / 2) * i +
             playerSize +
             (pairs[i].lockState / 100) * 2.5 * playerSize,
-          height * 0.5,
+          height * 0.55,
           lockSize,
           lockSize
         );
 
+        for (
+          let pendingNumber = pairs[i].score + 1;
+          pendingNumber < 3;
+          pendingNumber++
+        ) {
+          p5.stroke('#3D3D3D');
+          p5.strokeWeight(height / 80);
+          p5.line(
+            (width / 2) * i + playerSize,
+            height * 0.55 - 1.2 * lockSize * pendingNumber,
+            (width / 2) * i + 3.5 * playerSize,
+            height * 0.55 - 1.2 * lockSize * pendingNumber
+          );
+
+          p5.image(
+            images['lock']['pending'],
+            (width / 2) * i + playerSize + 0.5 * 2.5 * playerSize,
+            height * 0.55 - 1.2 * lockSize * pendingNumber,
+            lockSize,
+            lockSize
+          );
+        }
         for (let lifeNumber = 0; lifeNumber < pairs[i].lifeLeft; lifeNumber++) {
           p5.image(
             images['heart']['healthy'],
             (width / 2) * i + 2.25 * playerSize + (lifeNumber - 2) * lockSize,
-            height * 0.95,
+            height * 0.15,
             1.5 * lockSize,
             1.5 * lockSize
           );
@@ -192,7 +214,7 @@
           p5.image(
             images['heart']['dead'],
             (width / 2) * i + 2.25 * playerSize + (lifeNumber - 2) * lockSize,
-            height * 0.95,
+            height * 0.15,
             1.5 * lockSize,
             1.5 * lockSize
           );
