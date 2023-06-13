@@ -41,7 +41,7 @@
     let pNames = Object.keys(players);
     let mySocket = pNames[player_number];
     myName = players[mySocket]['pName'];
-    alive = players[mySocket]['alive'];
+    alive = players[mySocket]['alive'] == 0;
   });
 
   socket.on('start_post_mission', () => {

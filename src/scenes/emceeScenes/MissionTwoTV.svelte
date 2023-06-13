@@ -64,6 +64,7 @@
 
   onDestroy(() => {
     socket.off('broadcastPlayerStatus');
+    socket.off('broadcastState');
   });
 
   console.log(tilts);
