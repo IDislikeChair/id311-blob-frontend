@@ -13,6 +13,8 @@
   import player5 from '../../images/sprites/player5.gif';
   import player6 from '../../images/sprites/player6.gif';
   import target from '../../images/level3/target.gif';
+  import heart_healthy from '../../images/level2/heart_healthy.png';
+  import heart_dead from '../../images/level2/heart_dead.png';
   DebugGoToMission;
 
   const margin = 0;
@@ -25,8 +27,8 @@
     socket = value;
   });
 
-  const GAME_TICK_TIME = 33;
-  const MOVE_RATE = (0.3 * GAME_TICK_TIME) / 200;
+  const GAME_TICK_TIME = 16;
+  const MOVE_RATE = (0.5 * GAME_TICK_TIME) / 200;
 
   // Proxy class
   class TargetDummy {
@@ -46,6 +48,9 @@
 
   /** @type {Object.<number, TargetDummy>} */
   let targetDummies;
+
+  /** @type {[number, number]} */
+  let lives = [3, 3];
 
   /** @type {number[]} */
   let alive = [];
@@ -84,6 +89,21 @@
       }
 
       targetDummies = newTargetDummies;
+      lives = [
+        targetDummies[0].victimHealthPoint,
+        targetDummies[1].victimHealthPoint,
+      ];
+    });
+
+    socket.on('shotSuccess', (playerNum) => {
+      if (alive.length === 0) return;
+
+      const spriteId = 'player' + (playerNum + 1);
+
+      document.getElementById(spriteId).style.filter = 'invert(100%)';
+      setTimeout(() => {
+        document.getElementById(spriteId).style.filter = 'invert(0%)';
+      }, 100);
     });
   });
 
@@ -114,6 +134,10 @@
       images['player6'] = p5.loadImage(player6);
 
       images['target'] = p5.loadImage(target);
+
+      images['heart'] = {};
+      images['heart']['healthy'] = p5.loadImage(heart_healthy);
+      images['heart']['dead'] = p5.loadImage(heart_dead);
     };
 
     p5.setup = function () {
@@ -197,10 +221,12 @@
       frameBuffers.targetGraphicLeft.image(
         images['target'],
         (targetBoundaryWidth / 100) * targetDummies[alive[0]].targetPosition.x +
-          targetBoundaryLeft,
+          targetBoundaryLeft -
+          0.5 * flashLightSize,
         (targetBoundaryHeight / 100) *
           targetDummies[alive[0]].targetPosition.y +
-          targetBoundaryTop,
+          targetBoundaryTop -
+          0.5 * flashLightSize,
         flashLightSize,
         flashLightSize
       );
@@ -234,10 +260,12 @@
       frameBuffers.negativeMaskRight.noStroke();
       frameBuffers.negativeMaskRight.ellipse(
         (targetBoundaryWidth / 100) * targetDummies[alive[1]].cursorPosition.x +
-          targetBoundaryLeft,
+          targetBoundaryLeft -
+          0.5 * flashLightSize,
         (targetBoundaryHeight / 100) *
           targetDummies[alive[1]].cursorPosition.y +
-          targetBoundaryTop,
+          targetBoundaryTop -
+          0.5 * flashLightSize,
 
         flashLightSize,
         flashLightSize
@@ -282,7 +310,7 @@
       p5.image(targetRight, width / 2, 0);
 
       p5.noFill();
-      p5.stroke('rgb(255, 0, 255)');
+      p5.stroke(64);
       p5.strokeWeight(5);
       p5.rect(
         targetBoundaryLeft,
@@ -296,6 +324,30 @@
         targetBoundaryWidth,
         targetBoundaryHeight
       );
+
+      for (let i = 0; i < 2; i++) {
+        const liveCount = lives[i];
+
+        for (let lifeNumber = 0; lifeNumber < liveCount; lifeNumber++) {
+          p5.image(
+            images.heart.healthy,
+            (i * width) / 2 + 0.21 * width + (lifeNumber - 1) * 0.05 * width,
+            0.5 * height,
+            0.06 * width,
+            0.06 * width
+          );
+        }
+
+        for (let lifeNumber = liveCount; lifeNumber < 3; lifeNumber++) {
+          p5.image(
+            images.heart.dead,
+            (i * width) / 2 + 0.21 * width + (lifeNumber - 1) * 0.05 * width,
+            0.5 * height,
+            0.06 * width,
+            0.06 * width
+          );
+        }
+      }
     };
   };
 </script>
