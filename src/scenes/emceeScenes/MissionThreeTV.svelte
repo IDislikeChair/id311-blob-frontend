@@ -77,7 +77,7 @@
     }
 
     socket.on('broadcastMission3State', (newTargetDummies) => {
-      console.log(newTargetDummies);
+      //   console.log(newTargetDummies);
 
       if (alive.length === 0) {
         alive = Object.keys(newTargetDummies).map((key) => parseInt(key));
