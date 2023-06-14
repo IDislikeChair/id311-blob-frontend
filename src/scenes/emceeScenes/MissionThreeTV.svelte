@@ -371,12 +371,12 @@
         p5.textFont(nameFont);
         p5.textAlign(p5.LEFT, p5.BOTTOM);
         p5.text(
-          `${get(PLAYER_NAMES)[0]}'s screen`,
+          `${get(PLAYER_NAMES)[alive[0]]}'s screen`,
           targetBoundaryLeft,
           0.9 * targetBoundaryTop
         );
         p5.text(
-          `${get(PLAYER_NAMES)[1]}'s screen`,
+          `${get(PLAYER_NAMES)[alive[1]]}'s screen`,
           0.5 * width + targetBoundaryLeft,
           0.9 * targetBoundaryTop
         );
@@ -385,12 +385,12 @@
         p5.textSize(48);
         p5.textAlign(p5.LEFT, p5.CENTER);
         p5.text(
-          `${get(PLAYER_NAMES)[1]}'s HP`,
+          `${get(PLAYER_NAMES)[alive[1]]}'s HP`,
           targetBoundaryLeft,
           1.5 * targetBoundaryTop + targetBoundaryHeight
         );
         p5.text(
-          `${get(PLAYER_NAMES)[0]}'s HP`,
+          `${get(PLAYER_NAMES)[alive[0]]}'s HP`,
           0.5 * width + targetBoundaryLeft,
           1.5 * targetBoundaryTop + targetBoundaryHeight
         );
