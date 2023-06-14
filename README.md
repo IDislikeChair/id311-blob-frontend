@@ -36,7 +36,7 @@
   - Front-end: https://idislikechair.github.io/id311-blob-frontend
   - Back-end: https://blob-backend.herokuapp.com
 - Video
-  - Youtube: TODO
+  - Youtube: https://youtu.be/tvTyi44E1yk
 
 ---
 
