@@ -62,7 +62,7 @@
       p5.imageMode(p5.CORNER);
       p5.image(images['background'], xPosForBg, 0, width * 7, height);
       xPosForBg -= scrollSpeed;
-      if (xPosForBg < -width * 7) xPosForBg = 0;
+      if (xPosForBg < -width * 6) xPosForBg = 0;
 
       for (let player_number = 0; player_number < 6; player_number++) {
         const order = 6 - player_number - 1;
@@ -105,12 +105,12 @@
   };
 </script>
 
-<div class="endingCreditsContainer">
+<div class="endingCreditsTVContainer">
   <P5 {sketch} />
 </div>
 
 <style>
-  .endingCreditsContainer {
+  .endingCreditsTVContainer {
     display: flex;
     flex-direction: column;
     align-items: center;

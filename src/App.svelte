@@ -35,7 +35,6 @@
   });
 
   currentScene = JoinWindow;
-  //   currentScene = EndingCreditsTv;
 
   onMount(async () => {
     const backend = 'https://blob-backend.herokuapp.com';
