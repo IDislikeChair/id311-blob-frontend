@@ -43,7 +43,7 @@
   };
 </script>
 
-<div class="postMissionOneTVContainer">
+<div class="postMissionTWoTVContainer">
   <div class="nextBtn" on:click={start} />
   {#if showCard == 0}
     <div class="resultCard" />
@@ -110,7 +110,7 @@
 </div>
 
 <style>
-  .postMissionOneTVContainer {
+  .postMissionTWoTVContainer {
     display: flex;
     flex-direction: column;
     align-items: center;
