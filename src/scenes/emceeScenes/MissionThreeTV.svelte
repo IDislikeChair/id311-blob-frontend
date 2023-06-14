@@ -94,8 +94,8 @@
 
       targetDummies = newTargetDummies;
       lives = [
-        targetDummies[0].victimHealthPoint,
-        targetDummies[1].victimHealthPoint,
+        targetDummies[alive[0]].victimHealthPoint,
+        targetDummies[alive[1]].victimHealthPoint,
       ];
     });
 
