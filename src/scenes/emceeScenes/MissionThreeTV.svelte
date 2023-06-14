@@ -12,13 +12,12 @@
   import player4 from '../../images/sprites/player4.gif';
   import player5 from '../../images/sprites/player5.gif';
   import player6 from '../../images/sprites/player6.gif';
+  import target from '../../images/level3/target.gif';
   DebugGoToMission;
 
   const margin = 0;
   const width = window.innerWidth - margin,
     height = window.innerHeight - margin;
-  const playerSize = width / 3.5;
-  const steps = {};
 
   /** @type {Socket} */
   let socket;
@@ -26,36 +25,84 @@
     socket = value;
   });
 
+  const GAME_TICK_TIME = 33;
+  const MOVE_RATE = (0.3 * GAME_TICK_TIME) / 200;
+
+  // Proxy class
+  class TargetDummy {
+    /**
+     * @param {number} victimNumber
+     */
+    constructor(victimNumber) {
+      this.victimNumber = victimNumber;
+      this.victimHealthPoint = 5;
+
+      this.cursorPosition = { x: 50, y: 50 };
+      this.cursorMomentum = { x: 0, y: 0 };
+
+      this.targetPosition = { x: NaN, y: NaN };
+    }
+  }
+
+  /** @type {Object.<number, TargetDummy>} */
+  let targetDummies;
+
+  /** @type {number[]} */
+  let alive = [];
+
+  const calc_movement_tick = () => {
+    if (targetDummies == undefined) return;
+
+    for (let targetDummy of Object.values(targetDummies)) {
+      // recalculate position by target's momentum.
+      targetDummy.cursorPosition.x += targetDummy.cursorMomentum.x * MOVE_RATE;
+      targetDummy.cursorPosition.y += targetDummy.cursorMomentum.y * MOVE_RATE;
+
+      // limit range to from 0 to 99.
+      if (targetDummy.cursorPosition.x < 0) targetDummy.cursorPosition.x = 0;
+      if (targetDummy.cursorPosition.x > 99) targetDummy.cursorPosition.x = 99;
+      if (targetDummy.cursorPosition.y < 0) targetDummy.cursorPosition.y = 0;
+      if (targetDummy.cursorPosition.y > 99) targetDummy.cursorPosition.y = 99;
+    }
+  };
+
+  const calcMovementTickInterval = setInterval(
+    calc_movement_tick,
+    GAME_TICK_TIME
+  );
+
   $: onMount(async () => {
     while (!socket) {
       await new Promise((resolve) => setTimeout(resolve, 100));
     }
 
-    // socket.on('broadcastPlayerStatus', (stepCount) => {
-    //   for (let socketID of Object.keys(stepCount)) {
-    //     steps[stepCount[socketID].pName] = stepCount[socketID].steps;
-    //   }
-    // });
-  });
+    socket.on('broadcastMission3State', (newTargetDummies) => {
+      console.log(newTargetDummies);
 
-  let alive = [];
-  let targets = {};
+      if (alive.length === 0) {
+        alive = Object.keys(newTargetDummies).map((key) => parseInt(key));
+      }
 
-  socket.on('broadcastState', (new_targets) => {
-    if (Array.isArray(new_targets)) return;
-    targets = new_targets;
-    if (alive.length == 0)
-      alive = Object.keys(targets).map((str) => Number(str));
-    // console.log('broadcastState mission3', new_targets);
+      targetDummies = newTargetDummies;
+    });
   });
 
   onDestroy(() => {
-    // socket.off('broadcastPlayerStatus');
-    socket.off('broadcastState');
+    socket.off('broadcastMission3State');
+    clearInterval(calcMovementTickInterval);
   });
 
   const images = {};
+  const frameBuffers = {};
+
   const sketch = (p5) => {
+    const targetBoundaryWidth = 0.4 * width;
+    const targetBoundaryHeight = 0.4 * height;
+    const targetBoundaryLeft = (width / 2 - targetBoundaryWidth) / 2;
+    const targetBoundaryTop = 0.05 * width;
+
+    const flashLightSize = 0.1 * width;
+
     p5.preload = function () {
       images['background'] = p5.loadImage(background);
 
@@ -65,59 +112,190 @@
       images['player4'] = p5.loadImage(player4);
       images['player5'] = p5.loadImage(player5);
       images['player6'] = p5.loadImage(player6);
+
+      images['target'] = p5.loadImage(target);
     };
 
     p5.setup = function () {
       p5.createCanvas(width, height);
+
+      const frameBuffersWidth = width / 2;
+      const frameBuffersHeight = height;
+
+      frameBuffers['shadowGraphicsLeft'] = p5.createGraphics(
+        frameBuffersWidth,
+        frameBuffersHeight
+      );
+      frameBuffers['shadowGraphicsRight'] = p5.createGraphics(
+        frameBuffersWidth,
+        frameBuffersHeight
+      );
+
+      frameBuffers['targetGraphicLeft'] = p5.createGraphics(
+        frameBuffersWidth,
+        frameBuffersHeight
+      );
+      frameBuffers['targetGraphicRight'] = p5.createGraphics(
+        frameBuffersWidth,
+        frameBuffersHeight
+      );
+
+      frameBuffers['negativeMaskLeft'] = p5.createGraphics(
+        frameBuffersWidth,
+        frameBuffersHeight
+      );
+      frameBuffers['negativeMaskRight'] = p5.createGraphics(
+        frameBuffersWidth,
+        frameBuffersHeight
+      );
+      frameBuffers['positiveMaskLeft'] = p5.createGraphics(
+        frameBuffersWidth,
+        frameBuffersHeight
+      );
+      frameBuffers['positiveMaskRight'] = p5.createGraphics(
+        frameBuffersWidth,
+        frameBuffersHeight
+      );
     };
 
     p5.draw = function () {
       p5.clear();
+      frameBuffers.shadowGraphicsLeft.clear();
+      frameBuffers.shadowGraphicsRight.clear();
+      frameBuffers.targetGraphicLeft.clear();
+      frameBuffers.targetGraphicRight.clear();
+      frameBuffers.negativeMaskLeft.clear();
+      frameBuffers.negativeMaskRight.clear();
+      frameBuffers.positiveMaskLeft.clear();
+      frameBuffers.positiveMaskRight.clear();
+
       if (alive.length == 0) return;
 
-      const halfScreen = p5.createGraphics(width / 2, height);
-      halfScreen.fill('rgba(0,0,0,0.85)');
-      halfScreen.rect(0, 0, width / 2, height);
+      frameBuffers.shadowGraphicsLeft.fill('rgba(0,0,0,0.85)');
+      frameBuffers.shadowGraphicsLeft.rect(0, 0, width / 2, height);
 
-      const mask = p5.createGraphics(width / 2, height);
-      mask.background(0);
-      mask.erase();
-      mask.noStroke();
-      mask.ellipse(
-        (mask.width / 100) * targets[alive[0]]['x'],
-        (mask.height / 100) * targets[alive[0]]['y'],
-        mask.width / 5,
-        mask.width / 5
+      frameBuffers.negativeMaskLeft.background(0);
+      frameBuffers.negativeMaskLeft.erase();
+      frameBuffers.negativeMaskLeft.noStroke();
+      frameBuffers.negativeMaskLeft.fill(0);
+      frameBuffers.negativeMaskLeft.ellipse(
+        (targetBoundaryWidth / 100) * targetDummies[alive[0]].cursorPosition.x +
+          targetBoundaryLeft,
+        (targetBoundaryHeight / 100) *
+          targetDummies[alive[0]].cursorPosition.y +
+          targetBoundaryTop,
+
+        flashLightSize,
+        flashLightSize
       );
 
-      const halfImage = halfScreen.get();
-      const maskImg = mask.get();
+      const shadowOverlayLeft = frameBuffers.shadowGraphicsLeft.get();
+      const negativeMaskImgLeft = frameBuffers.negativeMaskLeft.get();
+      shadowOverlayLeft.mask(negativeMaskImgLeft);
+      p5.image(shadowOverlayLeft, 0, 0);
 
-      halfImage.mask(maskImg);
-
-      p5.image(halfImage, 0, 0);
-
-      const halfScreen2 = p5.createGraphics(width / 2, height);
-      halfScreen2.fill('rgba(0,0,0,0.85)');
-      halfScreen2.rect(0, 0, width / 2, height);
-
-      const mask2 = p5.createGraphics(width / 2, height);
-      mask2.background(0);
-      mask2.erase();
-      mask2.noStroke();
-      mask2.ellipse(
-        (mask2.width / 100) * targets[alive[1]]['x'],
-        (mask2.height / 100) * targets[alive[1]]['y'],
-        mask2.width / 5,
-        mask2.width / 5
+      frameBuffers.targetGraphicLeft.image(
+        images['target'],
+        (targetBoundaryWidth / 100) * targetDummies[alive[0]].targetPosition.x +
+          targetBoundaryLeft,
+        (targetBoundaryHeight / 100) *
+          targetDummies[alive[0]].targetPosition.y +
+          targetBoundaryTop,
+        flashLightSize,
+        flashLightSize
       );
 
-      const halfImage2 = halfScreen2.get();
-      const maskImg2 = mask2.get();
+      frameBuffers.positiveMaskLeft.background('rgba(0,0,0,0)');
+      frameBuffers.positiveMaskLeft.fill(0);
+      frameBuffers.positiveMaskLeft.noStroke();
+      frameBuffers.positiveMaskLeft.ellipse(
+        targetBoundaryLeft +
+          (targetBoundaryWidth / 100) *
+            targetDummies[alive[0]].cursorPosition.x,
+        targetBoundaryTop +
+          (targetBoundaryHeight / 100) *
+            targetDummies[alive[0]].cursorPosition.y,
+        flashLightSize,
+        flashLightSize
+      );
 
-      halfImage2.mask(maskImg2);
+      const targetLeft = frameBuffers.targetGraphicLeft.get();
+      const positiveMaskImgLeft = frameBuffers.positiveMaskLeft.get();
 
-      p5.image(halfImage2, width / 2, 0);
+      targetLeft.mask(positiveMaskImgLeft);
+
+      p5.image(targetLeft, 0, 0);
+
+      frameBuffers.shadowGraphicsRight.fill('rgba(0,0,0,0.85)');
+      frameBuffers.shadowGraphicsRight.rect(0, 0, width / 2, height);
+
+      frameBuffers.negativeMaskRight.background(0);
+      frameBuffers.negativeMaskRight.erase();
+      frameBuffers.negativeMaskRight.noStroke();
+      frameBuffers.negativeMaskRight.ellipse(
+        (targetBoundaryWidth / 100) * targetDummies[alive[1]].cursorPosition.x +
+          targetBoundaryLeft,
+        (targetBoundaryHeight / 100) *
+          targetDummies[alive[1]].cursorPosition.y +
+          targetBoundaryTop,
+
+        flashLightSize,
+        flashLightSize
+      );
+
+      const shadowOverlayRight = frameBuffers.shadowGraphicsRight.get();
+      const negativeMaskImgRight = frameBuffers.negativeMaskRight.get();
+
+      shadowOverlayRight.mask(negativeMaskImgRight);
+
+      p5.image(shadowOverlayRight, width / 2, 0);
+
+      frameBuffers.targetGraphicRight.image(
+        images['target'],
+        (targetBoundaryWidth / 100) * targetDummies[alive[1]].targetPosition.x +
+          targetBoundaryLeft,
+        (targetBoundaryHeight / 100) *
+          targetDummies[alive[1]].targetPosition.y +
+          targetBoundaryTop,
+        flashLightSize,
+        flashLightSize
+      );
+
+      frameBuffers.positiveMaskRight.background('rgba(0,0,0,0)');
+      frameBuffers.positiveMaskRight.fill(0);
+      frameBuffers.positiveMaskRight.noStroke();
+      frameBuffers.positiveMaskRight.ellipse(
+        targetBoundaryLeft +
+          (targetBoundaryLeft / 100) * targetDummies[alive[1]].cursorPosition.x,
+        targetBoundaryTop +
+          (targetBoundaryHeight / 100) *
+            targetDummies[alive[1]].cursorPosition.y,
+        flashLightSize,
+        flashLightSize
+      );
+
+      const targetRight = frameBuffers.targetGraphicRight.get();
+      const positiveMaskImgRight = frameBuffers.positiveMaskRight.get();
+
+      targetRight.mask(positiveMaskImgRight);
+
+      p5.image(targetRight, width / 2, 0);
+
+      p5.noFill();
+      p5.stroke('rgb(255, 0, 255)');
+      p5.strokeWeight(5);
+      p5.rect(
+        targetBoundaryLeft,
+        targetBoundaryTop,
+        targetBoundaryWidth,
+        targetBoundaryHeight
+      );
+      p5.rect(
+        targetBoundaryLeft + width / 2,
+        targetBoundaryTop,
+        targetBoundaryWidth,
+        targetBoundaryHeight
+      );
     };
   };
 </script>
