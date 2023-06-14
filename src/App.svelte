@@ -39,6 +39,7 @@
   onMount(async () => {
     const backend = 'https://blob-backend.herokuapp.com';
     // const backend = 'http://192.168.0.2:3000'; // For local dev
+    // const backend = 'http://192.249.31.81:3000'; // For local dev with welcomeKaist
     socket = io(backend);
 
     SOCKET.set(socket);
