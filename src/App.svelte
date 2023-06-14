@@ -23,6 +23,7 @@
   import PostMissionTwoTv from './scenes/emceeScenes/PostMissionTwoTV.svelte';
   import PostMissionThree from './scenes/playerScenes/PostMissionThree.svelte';
   import PostMissionThreeTv from './scenes/emceeScenes/PostMissionThreeTV.svelte';
+  import EndingCreditsTv from './scenes/emceeScenes/EndingCreditsTV.svelte';
 
   let socket;
   let status = 'NONE';
