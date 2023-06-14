@@ -24,6 +24,7 @@
   import PostMissionThree from './scenes/playerScenes/PostMissionThree.svelte';
   import PostMissionThreeTv from './scenes/emceeScenes/PostMissionThreeTV.svelte';
   import EndingCreditsTv from './scenes/emceeScenes/EndingCreditsTV.svelte';
+  import EndingCredits from './scenes/playerScenes/EndingCredits.svelte';
 
   let socket;
   let status = 'NONE';
@@ -172,7 +173,7 @@
           currentScene = EndingCreditsTv;
           break;
         case 1:
-          currentScene = EndingCreditsTv;
+          currentScene = EndingCredits;
           break;
       }
     });
