@@ -219,38 +219,30 @@
     height: calc(var(--height) * 0.15 * 1px);
     margin-left: 2vw;
     margin-right: 2vw;
+
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
   }
   .pName {
     font-size: 2.5vw;
   }
   #player1 {
     background-image: url('../../images/sprites/player1.gif');
-    background-size: contain;
-    background-repeat: no-repeat;
   }
   #player2 {
     background-image: url('../../images/sprites/player2.gif');
-    background-size: contain;
-    background-repeat: no-repeat;
   }
   #player3 {
     background-image: url('../../images/sprites/player3.gif');
-    background-size: contain;
-    background-repeat: no-repeat;
   }
   #player4 {
     background-image: url('../../images/sprites/player4.gif');
-    background-size: contain;
-    background-repeat: no-repeat;
   }
   #player5 {
     background-image: url('../../images/sprites/player5.gif');
-    background-size: contain;
-    background-repeat: no-repeat;
   }
   #player6 {
     background-image: url('../../images/sprites/player6.gif');
-    background-size: contain;
-    background-repeat: no-repeat;
   }
 </style>

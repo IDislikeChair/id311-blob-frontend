@@ -54,7 +54,7 @@
 <audio src={narration} bind:this={audio} />
 
 <div class="postMissionThreeTVContainer">
-  <!-- <div class="nextBtn" on:click={start} /> -->
+  <div class="nextBtn" on:click={start} />
   {#if showCard == 0}
     <div class="resultCard" />
     <div class="results">
@@ -181,7 +181,7 @@
     position: absolute;
     z-index: -1;
   }
-  /* .nextBtn {
+  .nextBtn {
     background-image: url('../../images/level3/tv_next.png');
     background-size: cover;
     background-position: center;
@@ -191,7 +191,7 @@
     position: fixed;
     right: calc(1vw * 5 * 16 / 25);
     bottom: calc(1vw * 5 * 9 / 25);
-  } */
+  }
 
   .results {
     display: flex;
@@ -225,6 +225,10 @@
     height: calc(var(--height) * 0.2 * 1px);
     margin-left: 2vw;
     margin-right: 2vw;
+
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
   }
   .pName {
     font-size: 2.5vw;
@@ -236,6 +240,10 @@
     margin-top: 3vh;
     margin-left: 1vw;
     margin-right: 1vw;
+
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
   }
   .pName_eliminated {
     font-size: 2vw;
@@ -247,32 +255,20 @@
 
   #player1 {
     background-image: url('../../images/sprites/player1.gif');
-    background-size: contain;
-    background-repeat: no-repeat;
   }
   #player2 {
     background-image: url('../../images/sprites/player2.gif');
-    background-size: contain;
-    background-repeat: no-repeat;
   }
   #player3 {
     background-image: url('../../images/sprites/player3.gif');
-    background-size: contain;
-    background-repeat: no-repeat;
   }
   #player4 {
     background-image: url('../../images/sprites/player4.gif');
-    background-size: contain;
-    background-repeat: no-repeat;
   }
   #player5 {
     background-image: url('../../images/sprites/player5.gif');
-    background-size: contain;
-    background-repeat: no-repeat;
   }
   #player6 {
     background-image: url('../../images/sprites/player6.gif');
-    background-size: contain;
-    background-repeat: no-repeat;
   }
 </style>
