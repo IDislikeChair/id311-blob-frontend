@@ -3,6 +3,7 @@
   import { PLAYER_NAMES, SOCKET } from '../../stores';
   import { onMount } from 'svelte';
   import DebugGoToMission from '../DEBUG_go_to_mission.svelte';
+  import lobbyMusic from '../../sounds/Fuzzball_Parade.mp3';
 
   /** @type {Socket} */
   let socket;
@@ -45,9 +46,19 @@
 
     socket.emit('on_next');
   };
+
+  let lobbyMusicAudio;
 </script>
 
-<div class="waitingPlayers" style="--innerWidth:{window.innerWidth};">
+<audio loop src={lobbyMusic} preload="auto" bind:this={lobbyMusicAudio} />
+
+<div
+  on:mouseenter={() => {
+    lobbyMusicAudio.play();
+  }}
+  class="waitingPlayers"
+  style="--innerWidth:{window.innerWidth};"
+>
   <div class="hostInfo">
     <div class="codeTitle">Game Code:</div>
     <div class="gameCode">{sessionId}</div>
