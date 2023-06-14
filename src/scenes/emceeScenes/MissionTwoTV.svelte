@@ -1,8 +1,9 @@
 <script>
   import { Socket } from 'socket.io-client';
-  import { SOCKET } from '../../stores';
+  import { SOCKET, PLAYER_NAMES } from '../../stores';
   import { createEventDispatcher, onMount, onDestroy } from 'svelte';
   import DebugGoToMission from '../DEBUG_go_to_mission.svelte';
+  import { get } from 'svelte/store';
   import P5 from 'p5-svelte';
 
   import box_open from '../../images/box_open.png';
@@ -23,7 +24,7 @@
   const margin = 10;
   const width = window.innerWidth - margin,
     height = window.innerHeight - margin;
-  const playerSize = width / 10,
+  const playerSize = width / 12,
     boxSize = width / 7,
     lockSize = width / 17;
   const tilts = {};
@@ -47,6 +48,7 @@
   socket.on('broadcastMission2State', (new_pairs) => {
     pairs = new_pairs;
     socket.emit('gotPairs');
+    console.log(pairs);
 
     for (let i = 0; i < 2; i++) {
       alive.push(pairs[i]?.solverNumber);
@@ -113,22 +115,39 @@
 
       for (let i = 0; i < 2; i++) {
         // players
+        p5.textFont('Courier New');
+        p5.textSize(playerSize / 5);
+        p5.textAlign(p5.CENTER);
+        p5.textStyle(p5.BOLD);
+        p5.noStroke();
+        p5.fill('#000000');
+
         images['players'][pairs[i]?.solverNumber]?.size(playerSize, playerSize);
         images['players'][pairs[i]?.solverNumber]?.position(
-          (width / 2) * i + playerSize + playerSize / 2,
+          (width / 2) * i + playerSize,
           height * 0.75
+        );
+        p5.text(
+          get(PLAYER_NAMES)[pairs[i]?.solverNumber],
+          (width / 2) * i + playerSize + playerSize * 0.5,
+          height * 0.75 + playerSize * 1.2
         );
 
         images['players'][pairs[i]?.guiderNumber]?.size(playerSize, playerSize);
         images['players'][pairs[i]?.guiderNumber]?.position(
-          (width / 2) * i + playerSize - playerSize / 2,
+          (width / 2) * i + playerSize * 2,
           height * 0.75
+        );
+        p5.text(
+          get(PLAYER_NAMES)[pairs[i]?.guiderNumber],
+          (width / 2) * i + playerSize * 2 + playerSize * 0.5,
+          height * 0.75 + playerSize * 1.2
         );
 
         // box
         p5.image(
           images['box']['closed'],
-          (width / 2) * i + playerSize * 3.5,
+          (width / 2) * i + playerSize * 4,
           height * 0.8,
           boxSize,
           boxSize * boxClosedRatio
@@ -143,16 +162,16 @@
           p5.stroke('#3D3D3D');
           p5.strokeWeight(height / 80);
           p5.line(
-            (width / 2) * i + playerSize,
+            (width / 2) * i + 1.5 * playerSize,
             height * 0.6 - 1.2 * lockSize * (unlockNumber + 1),
-            (width / 2) * i + 3.5 * playerSize,
+            (width / 2) * i + 4 * playerSize,
             height * 0.6 - 1.2 * lockSize * (unlockNumber + 1)
           );
 
           p5.image(
             images['lock']['unlocked'],
             (width / 2) * i +
-              playerSize +
+              1.5 * playerSize +
               (saved_unlock_positions[i][unlockNumber] / 100) *
                 2.5 *
                 playerSize,
@@ -165,16 +184,16 @@
         p5.stroke('#3D3D3D');
         p5.strokeWeight(height / 80);
         p5.line(
-          (width / 2) * i + playerSize,
+          (width / 2) * i + 1.5 * playerSize,
           height * 0.6,
-          (width / 2) * i + 3.5 * playerSize,
+          (width / 2) * i + 4 * playerSize,
           height * 0.6
         );
 
         p5.image(
           images['lock']['active'],
           (width / 2) * i +
-            playerSize +
+            1.5 * playerSize +
             (pairs[i].lockState / 100) * 2.5 * playerSize,
           height * 0.6,
           lockSize,
@@ -189,38 +208,43 @@
           p5.stroke('#3D3D3D');
           p5.strokeWeight(height / 80);
           p5.line(
-            (width / 2) * i + playerSize,
+            (width / 2) * i + 1.5 * playerSize,
             height * 0.6 - 1.2 * lockSize * pendingNumber,
-            (width / 2) * i + 3.5 * playerSize,
+            (width / 2) * i + 4 * playerSize,
             height * 0.6 - 1.2 * lockSize * pendingNumber
           );
 
           p5.image(
             images['lock']['pending'],
-            (width / 2) * i + playerSize + 0.5 * 2.5 * playerSize,
+            (width / 2) * i + 1.5 * playerSize + 0.5 * 2.5 * playerSize,
             height * 0.6 - 1.2 * lockSize * pendingNumber,
             lockSize,
             lockSize
           );
         }
 
+        // hearts
         for (let lifeNumber = 0; lifeNumber < pairs[i].lifeLeft; lifeNumber++) {
           p5.image(
             images['heart']['healthy'],
-            (width / 2) * i + 2.25 * playerSize + (lifeNumber - 2) * lockSize,
+            (width / 2) * i +
+              2.7 * playerSize +
+              (lifeNumber - 2) * lockSize * 0.7,
             height * 0.15,
-            1.5 * lockSize,
-            1.5 * lockSize
+            lockSize,
+            lockSize
           );
         }
 
         for (let lifeNumber = pairs[i].lifeLeft; lifeNumber < 5; lifeNumber++) {
           p5.image(
             images['heart']['dead'],
-            (width / 2) * i + 2.25 * playerSize + (lifeNumber - 2) * lockSize,
+            (width / 2) * i +
+              2.7 * playerSize +
+              (lifeNumber - 2) * lockSize * 0.7,
             height * 0.15,
-            1.5 * lockSize,
-            1.5 * lockSize
+            lockSize,
+            lockSize
           );
         }
       }
