@@ -164,6 +164,18 @@
           break;
       }
     });
+
+    socket.on('start_end_screen', (msg) => {
+      console.log('start_end_screen', msg);
+      switch (role) {
+        case 0:
+          currentScene = EndingCreditsTv;
+          break;
+        case 1:
+          currentScene = EndingCreditsTv;
+          break;
+      }
+    });
   });
 
   function change_scene(event) {
