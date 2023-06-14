@@ -1,6 +1,6 @@
 <script>
   import { Socket } from 'socket.io-client';
-  import { SOCKET } from '../../stores';
+  import { PLAYER_NAMES, SOCKET } from '../../stores';
   import { createEventDispatcher, onMount, onDestroy } from 'svelte';
   import DebugGoToMission from '../DEBUG_go_to_mission.svelte';
   import P5 from 'p5-svelte';
@@ -15,6 +15,8 @@
   import target from '../../images/level3/target.gif';
   import heart_healthy from '../../images/level2/heart_healthy.png';
   import heart_dead from '../../images/level2/heart_dead.png';
+  import { get } from 'svelte/store';
+  import name_font from '../../fonts/VT323-Regular.ttf';
   DebugGoToMission;
 
   const margin = 0;
@@ -98,7 +100,9 @@
     socket.on('shotSuccess', (playerNum) => {
       if (alive.length === 0) return;
 
-      const spriteId = 'player' + (playerNum + 1);
+      const victimNumber = targetDummies[alive[playerNum]].victimNumber;
+
+      const spriteId = 'player' + (victimNumber + 1);
 
       document.getElementById(spriteId).style.filter = 'invert(100%)';
       setTimeout(() => {
@@ -114,10 +118,11 @@
 
   const images = {};
   const frameBuffers = {};
+  let nameFont;
 
   const sketch = (p5) => {
     const targetBoundaryWidth = 0.4 * width;
-    const targetBoundaryHeight = 0.4 * height;
+    const targetBoundaryHeight = targetBoundaryWidth;
     const targetBoundaryLeft = (width / 2 - targetBoundaryWidth) / 2;
     const targetBoundaryTop = 0.05 * width;
 
@@ -138,6 +143,8 @@
       images['heart'] = {};
       images['heart']['healthy'] = p5.loadImage(heart_healthy);
       images['heart']['dead'] = p5.loadImage(heart_dead);
+
+      nameFont = p5.loadFont(name_font);
     };
 
     p5.setup = function () {
@@ -260,12 +267,10 @@
       frameBuffers.negativeMaskRight.noStroke();
       frameBuffers.negativeMaskRight.ellipse(
         (targetBoundaryWidth / 100) * targetDummies[alive[1]].cursorPosition.x +
-          targetBoundaryLeft -
-          0.5 * flashLightSize,
+          targetBoundaryLeft,
         (targetBoundaryHeight / 100) *
           targetDummies[alive[1]].cursorPosition.y +
-          targetBoundaryTop -
-          0.5 * flashLightSize,
+          targetBoundaryTop,
 
         flashLightSize,
         flashLightSize
@@ -281,10 +286,12 @@
       frameBuffers.targetGraphicRight.image(
         images['target'],
         (targetBoundaryWidth / 100) * targetDummies[alive[1]].targetPosition.x +
-          targetBoundaryLeft,
+          targetBoundaryLeft -
+          0.5 * flashLightSize,
         (targetBoundaryHeight / 100) *
           targetDummies[alive[1]].targetPosition.y +
-          targetBoundaryTop,
+          targetBoundaryTop -
+          0.5 * flashLightSize,
         flashLightSize,
         flashLightSize
       );
@@ -294,10 +301,11 @@
       frameBuffers.positiveMaskRight.noStroke();
       frameBuffers.positiveMaskRight.ellipse(
         targetBoundaryLeft +
-          (targetBoundaryLeft / 100) * targetDummies[alive[1]].cursorPosition.x,
+          (targetBoundaryWidth / 100) *
+            targetDummies[alive[0]].cursorPosition.x,
         targetBoundaryTop +
           (targetBoundaryHeight / 100) *
-            targetDummies[alive[1]].cursorPosition.y,
+            targetDummies[alive[0]].cursorPosition.y,
         flashLightSize,
         flashLightSize
       );
@@ -331,22 +339,58 @@
         for (let lifeNumber = 0; lifeNumber < liveCount; lifeNumber++) {
           p5.image(
             images.heart.healthy,
-            (i * width) / 2 + 0.21 * width + (lifeNumber - 1) * 0.05 * width,
-            0.5 * height,
-            0.06 * width,
-            0.06 * width
+            (i * width) / 2 +
+              0.5 * width -
+              (3 - lifeNumber) * 0.04 * width -
+              targetBoundaryLeft,
+            1 * targetBoundaryTop + targetBoundaryHeight,
+            0.05 * width,
+            0.05 * width
           );
         }
 
         for (let lifeNumber = liveCount; lifeNumber < 3; lifeNumber++) {
           p5.image(
             images.heart.dead,
-            (i * width) / 2 + 0.21 * width + (lifeNumber - 1) * 0.05 * width,
-            0.5 * height,
-            0.06 * width,
-            0.06 * width
+            (i * width) / 2 +
+              0.5 * width -
+              (3 - lifeNumber) * 0.04 * width -
+              targetBoundaryLeft,
+            1 * targetBoundaryTop + targetBoundaryHeight,
+            0.05 * width,
+            0.05 * width
           );
         }
+
+        p5.noStroke();
+        p5.fill(200);
+        p5.textSize(60);
+        p5.textFont(nameFont);
+        p5.textAlign(p5.LEFT, p5.BOTTOM);
+        p5.text(
+          `${get(PLAYER_NAMES)[0]}'s screen`,
+          targetBoundaryLeft,
+          0.9 * targetBoundaryTop
+        );
+        p5.text(
+          `${get(PLAYER_NAMES)[1]}'s screen`,
+          0.5 * width + targetBoundaryLeft,
+          0.9 * targetBoundaryTop
+        );
+
+        p5.fill(255);
+        p5.textSize(48);
+        p5.textAlign(p5.LEFT, p5.CENTER);
+        p5.text(
+          `${get(PLAYER_NAMES)[1]}'s HP`,
+          targetBoundaryLeft,
+          1.5 * targetBoundaryTop + targetBoundaryHeight
+        );
+        p5.text(
+          `${get(PLAYER_NAMES)[0]}'s HP`,
+          0.5 * width + targetBoundaryLeft,
+          1.5 * targetBoundaryTop + targetBoundaryHeight
+        );
       }
     };
   };
