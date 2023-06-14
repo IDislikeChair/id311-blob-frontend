@@ -302,10 +302,10 @@
       frameBuffers.positiveMaskRight.ellipse(
         targetBoundaryLeft +
           (targetBoundaryWidth / 100) *
-            targetDummies[alive[0]].cursorPosition.x,
+            targetDummies[alive[1]].cursorPosition.x,
         targetBoundaryTop +
           (targetBoundaryHeight / 100) *
-            targetDummies[alive[0]].cursorPosition.y,
+            targetDummies[alive[1]].cursorPosition.y,
         flashLightSize,
         flashLightSize
       );
