@@ -54,7 +54,7 @@
 <audio src={narration} bind:this={audio} />
 
 <div class="postMissionThreeTVContainer">
-  <div class="nextBtn" on:click={start} />
+  <!-- <div class="nextBtn" on:click={start} /> -->
   {#if showCard == 0}
     <div class="resultCard" />
     <div class="results">
@@ -181,7 +181,7 @@
     position: absolute;
     z-index: -1;
   }
-  .nextBtn {
+  /* .nextBtn {
     background-image: url('../../images/level3/tv_next.png');
     background-size: cover;
     background-position: center;
@@ -191,7 +191,7 @@
     position: fixed;
     right: calc(1vw * 5 * 16 / 25);
     bottom: calc(1vw * 5 * 9 / 25);
-  }
+  } */
 
   .results {
     display: flex;
