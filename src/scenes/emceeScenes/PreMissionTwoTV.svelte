@@ -3,6 +3,7 @@
   import { SOCKET } from '../../stores';
   import { onMount } from 'svelte';
   import DebugGoToMission from '../DEBUG_go_to_mission.svelte';
+  import narration from '../../sounds/L2_Pre.mp3';
 
   /** @type {Socket} */
   let socket;
@@ -29,6 +30,8 @@
     socket.emit('on_next');
   };
 </script>
+
+<audio src={narration} autoplay />
 
 <div class="preMissionTwoTVContainer">
   <div class="missionCard" />

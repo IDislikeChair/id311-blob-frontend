@@ -19,6 +19,8 @@
   import player6 from '../../images/sprites/player6_side.gif';
   import heart_healthy from '../../images/level2/heart_healthy.png';
   import heart_dead from '../../images/level2/heart_dead.png';
+  import game_start from '../../sounds/game_start.mp3';
+  import open_chest from '../../sounds/open_chest.mp3';
   DebugGoToMission;
 
   const margin = 10;
@@ -56,8 +58,11 @@
     }
   });
 
+  let open_chest_audio;
+
   socket.on('submitAnswerSuccess', (pairNumber) => {
     saved_unlock_positions[pairNumber].push(pairs[pairNumber].lockState);
+    open_chest_audio.play();
   });
 
   socket.on('submitAnswerFail', (pairNumber) => {
@@ -254,6 +259,9 @@
     };
   };
 </script>
+
+<audio src={game_start} autoplay />
+<audio src={open_chest} bind:this={open_chest_audio} />
 
 <div class="missionTwoTVContainer">
   <P5 {sketch} />

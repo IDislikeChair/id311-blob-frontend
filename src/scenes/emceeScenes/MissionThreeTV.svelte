@@ -17,7 +17,8 @@
   import heart_dead from '../../images/level2/heart_dead.png';
   import { get } from 'svelte/store';
   import name_font from '../../fonts/VT323-Regular.ttf';
-  DebugGoToMission;
+  import game_start from '../../sounds/game_start.mp3';
+  import shoot from '../../sounds/shoot.mp3';
 
   const margin = 0;
   const width = window.innerWidth - margin,
@@ -78,6 +79,7 @@
     GAME_TICK_TIME
   );
 
+  let shootAudio;
   $: onMount(async () => {
     while (!socket) {
       await new Promise((resolve) => setTimeout(resolve, 100));
@@ -100,6 +102,7 @@
     socket.on('shotSuccess', (playerNum) => {
       if (alive.length === 0) return;
 
+      shootAudio.play();
       const victimNumber = targetDummies[alive[playerNum]].victimNumber;
 
       const spriteId = 'player' + (victimNumber + 1);
@@ -396,6 +399,9 @@
   };
 </script>
 
+<audio src={game_start} autoplay />
+<audio src={shoot} bind:this={shootAudio} />
+
 <div class="missionThreeTVContainer">
   <div>
     <div
@@ -414,7 +420,15 @@
   <div class="lights">
     <P5 {sketch} />
   </div>
+  <button
+    on:click={() => {
+      socket.emit('on_next');
+    }}
+  />
 </div>
+
+<audio src={game_start} autoplay />
+<audio src={shoot} bind:this={shootAudio} />
 
 <style>
   .missionThreeTVContainer {

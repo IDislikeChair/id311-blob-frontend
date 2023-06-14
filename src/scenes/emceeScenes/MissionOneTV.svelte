@@ -5,6 +5,7 @@
   import DebugGoToMission from '../DEBUG_go_to_mission.svelte';
   import { get } from 'svelte/store';
   import P5 from 'p5-svelte';
+  import game_start from '../../sounds/game_start.mp3';
 
   import boat from '../../images/boat.png';
   import player1 from '../../images/sprites/player1_back.gif';
@@ -161,6 +162,8 @@
     };
   };
 </script>
+
+<audio src={game_start} autoplay />
 
 <div class="missionOneTVContainer">
   <P5 {sketch} />

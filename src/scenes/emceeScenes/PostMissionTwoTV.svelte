@@ -2,6 +2,8 @@
   import { Socket } from 'socket.io-client';
   import { SOCKET } from '../../stores';
   import { onMount } from 'svelte';
+  import level_end from '../../sounds/level_end.mp3';
+  import narration from '../../sounds/L2_Post.mp3';
   import DebugGoToMission from '../DEBUG_go_to_mission.svelte';
 
   /** @type {Socket} */
@@ -37,11 +39,16 @@
   });
 
   let showCard = 0;
+  let audio;
   const start = () => {
     showCard++;
+    if (showCard == 1) audio.play();
     if (showCard == 2) socket.emit('on_next');
   };
 </script>
+
+<audio src={level_end} autoplay />
+<audio src={narration} bind:this={audio} />
 
 <div class="postMissionTWoTVContainer">
   <div class="nextBtn" on:click={start} />
