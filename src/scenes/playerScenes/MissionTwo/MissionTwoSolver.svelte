@@ -41,6 +41,10 @@
     socket.on('myRolePartner', (partnerNumber) => {
       pImageID = 'player' + (partnerNumber + 1);
     });
+
+    if (navigator.userAgent.match(/Android/i)) {
+      deviceTiltCoeff = -1;
+    }
   });
 
   onDestroy(() => {

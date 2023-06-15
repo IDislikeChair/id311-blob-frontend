@@ -46,6 +46,12 @@
       updated = true;
       totPlayers = players;
     });
+
+    if (navigator.userAgent.match(/Android/i)) {
+      deviceTiltCoeffX = -1;
+    } else if (navigator.userAgent.match(/iPhone/i)) {
+      deviceTiltCoeffY = -1;
+    }
   });
 
   onDestroy(() => {
