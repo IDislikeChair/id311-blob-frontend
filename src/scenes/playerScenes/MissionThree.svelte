@@ -28,18 +28,12 @@
       await new Promise((resolve) => setTimeout(resolve, 100));
     }
 
-    // Check if the device supports the accelerometer
     if (window.DeviceMotionEvent) {
-      // Register the event listener for device motion
       window.addEventListener('devicemotion', handleMotionEvent);
-      // Start the tilt detection interval
       tiltInterval = setInterval(send_acceleration, 200);
     } else if (window.DeviceOrientationEvent) {
       window.addEventListener('deviceorientation', handleMotionEvent);
       tiltInterval = setInterval(send_acceleration, 200);
-    } else {
-      // Display an error message if the device does not support the accelerometer
-      status = 'Accelerometer not supported';
     }
 
     socket.on('broadcastPlayerStatus', (players) => {
@@ -55,7 +49,6 @@
   });
 
   onDestroy(() => {
-    // Clean up event listeners and intervals
     window.removeEventListener('devicemotion', handleMotionEvent);
     clearInterval(tiltInterval);
   });
