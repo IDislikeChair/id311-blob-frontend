@@ -1,10 +1,8 @@
 <script>
   import { Socket } from 'socket.io-client';
   import { PLAYER_NUMBER, SOCKET } from '../../stores';
-  import { createEventDispatcher, onMount, onDestroy } from 'svelte';
+  import { onMount, onDestroy } from 'svelte';
   import PostMissionThree from './PostMissionThree.svelte';
-
-  const dispatch = createEventDispatcher();
 
   /** @type {Socket} */
   let socket;
@@ -12,8 +10,6 @@
     socket = value;
   });
 
-  let status = 'Hello';
-  let device = 'Device not identified';
   let xAcceleration = 0,
     yAcceleration = 0;
   let tiltInterval;
@@ -35,16 +31,6 @@
       await new Promise((resolve) => setTimeout(resolve, 100));
     }
 
-    if (navigator.userAgent.match(/Android/i)) {
-      device = 'Android';
-      deviceTiltCoeffX = -1;
-    } else if (navigator.userAgent.match(/iPhone/i)) {
-      device = 'iPhone';
-      deviceTiltCoeffY = -1;
-    } else {
-      device = 'We only support Android and iOS(iPhone)';
-    }
-
     // Check if the device supports the accelerometer
     if (window.DeviceMotionEvent) {
       // Register the event listener for device motion
@@ -62,12 +48,6 @@
     socket.on('broadcastPlayerStatus', (players) => {
       updated = true;
       totPlayers = players;
-    });
-  });
-
-  socket.on('start_post_mission', () => {
-    dispatch('changeScene', {
-      new_scene: PostMissionThree,
     });
   });
 

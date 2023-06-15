@@ -1,10 +1,7 @@
 <script>
   import { Socket } from 'socket.io-client';
   import { SOCKET } from '../../../stores';
-  import { createEventDispatcher, onMount, onDestroy } from 'svelte';
-  import PostMissionTwo from '../PostMissionTwo.svelte';
-
-  const dispatch = createEventDispatcher();
+  import { onMount, onDestroy } from 'svelte';
 
   /** @type {Socket} */
   let socket;
@@ -12,16 +9,12 @@
     socket = value;
   });
 
-  let status = 'Hello';
-  let device = 'Device not identified';
   let xAcceleration = 0;
   let tiltInterval;
   let deviceTiltCoeff = 1;
 
-  let updated = false,
-    myPartner = 0,
-    pImageID = 'player1',
-    totPlayers = [];
+  let updated = false;
+  let pImageID = 'player1';
 
   let attempts = 5;
 
@@ -30,15 +23,6 @@
   $: onMount(async () => {
     while (!socket) {
       await new Promise((resolve) => setTimeout(resolve, 100));
-    }
-
-    if (navigator.userAgent.match(/Android/i)) {
-      device = 'Android';
-      deviceTiltCoeff = -1;
-    } else if (navigator.userAgent.match(/iPhone/i)) {
-      device = 'iPhone';
-    } else {
-      device = 'We only support Android and iOS(iPhone)';
     }
 
     // Check if the device supports the accelerometer
@@ -50,30 +34,18 @@
     } else if (window.DeviceOrientationEvent) {
       window.addEventListener('deviceorientation', handleMotionEvent);
       tiltInterval = setInterval(send_acceleration, 200);
-    } else {
-      // Display an error message if the device does not support the accelerometer
-      status = 'Accelerometer not supported';
     }
 
     socket.on('broadcastPlayerStatus', (players) => {
       updated = true;
-      totPlayers = players;
     });
   });
 
   socket.on('myRolePartner', (partnerNumber) => {
-    myPartner = partnerNumber;
     pImageID = 'player' + (partnerNumber + 1);
   });
 
-  socket.on('start_post_mission', () => {
-    dispatch('changeScene', {
-      new_scene: PostMissionTwo,
-    });
-  });
-
   onDestroy(() => {
-    // Clean up event listeners and intervals
     window.removeEventListener('devicemotion', handleMotionEvent);
     clearInterval(tiltInterval);
   });
@@ -98,11 +70,11 @@
 >
   <div class="clientTitle">
     Tilt your phone<br /> to move the slider,<br />
-    tap screen<br /> to lockpick
+    tap screen<br /> to pick lock
   </div>
 
   <div class="attemtDesc">
-    {attempts}/5 lockpick attempt(s) left
+    {attempts}/5 lock picking attempt(s) left
   </div>
 
   {#if updated}
@@ -111,8 +83,6 @@
       <div class="pImage" id={pImageID} />
     </div>
   {/if}
-  <!-- <div id="device">Device Type: {device}</div>
-  <div id="status">Tilting Status: {status}</div> -->
 </div>
 
 <style>

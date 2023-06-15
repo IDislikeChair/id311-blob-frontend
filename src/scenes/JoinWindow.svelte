@@ -6,7 +6,6 @@
   import { Socket } from 'socket.io-client';
 
   const dispatch = createEventDispatcher();
-  let device = 'Device not identified';
 
   /** @type {Socket} */
   let socket;
@@ -20,11 +19,8 @@
     }
 
     if (navigator.userAgent.match(/Android/i)) {
-      device = 'Android';
     } else if (navigator.userAgent.match(/iPhone/i)) {
-      device = 'iPhone';
     } else {
-      device = 'You should be host';
       join_as_host();
     }
   });

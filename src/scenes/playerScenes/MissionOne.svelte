@@ -1,10 +1,7 @@
 <script>
   import { Socket } from 'socket.io-client';
   import { PLAYER_NUMBER, SOCKET } from '../../stores';
-  import { createEventDispatcher, onMount, onDestroy } from 'svelte';
-  import PostMissionOne from './PostMissionOne.svelte';
-
-  const dispatch = createEventDispatcher();
+  import { onMount } from 'svelte';
 
   /** @type {Socket} */
   let socket;
@@ -32,12 +29,6 @@
       socket.emit('post_mission_result', {
         player_number: player_number,
         stepCount: result,
-      });
-    });
-
-    socket.on('start_post_mission', () => {
-      dispatch('changeScene', {
-        new_scene: PostMissionOne,
       });
     });
 

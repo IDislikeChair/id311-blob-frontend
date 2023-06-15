@@ -1,10 +1,7 @@
 <script>
   import { Socket } from 'socket.io-client';
   import { PLAYER_NUMBER, SOCKET } from '../../stores';
-  import { createEventDispatcher, onMount, onDestroy } from 'svelte';
-  import PreMissionThree from './PreMissionThree.svelte';
-
-  const dispatch = createEventDispatcher();
+  import { onMount } from 'svelte';
 
   /** @type {Socket} */
   let socket;

@@ -1,7 +1,6 @@
 <script>
   import { onMount } from 'svelte';
   import P5 from 'p5-svelte';
-  import DebugGoToMission from '../DEBUG_go_to_mission.svelte';
 
   import background from '../../images/ending_background.png';
   import credits from '../../images/credits.png';
@@ -30,12 +29,6 @@
       images['thankyou'] = p5.loadImage(thankyou);
 
       images['players'] = [];
-      //   images['players'].push(p5.createImg(player1));
-      //   images['players'].push(p5.createImg(player2));
-      //   images['players'].push(p5.createImg(player3));
-      //   images['players'].push(p5.createImg(player4));
-      //   images['players'].push(p5.createImg(player5));
-      //   images['players'].push(p5.createImg(player6));
       images['players'].push(p5.loadImage(player1));
       images['players'].push(p5.loadImage(player2));
       images['players'].push(p5.loadImage(player3));
@@ -75,13 +68,6 @@
         }
         const yPos = height * 0.75 + dy;
 
-        if (xPos > width - playerSize + width / 12) {
-          //   images['players'][order].hide();
-          continue;
-        }
-        // images['players'][order].show();
-        // images['players'][order].size(playerSize, playerSize);
-        // images['players'][order].position(xPos, yPos);
         p5.image(images['players'][order], xPos, yPos, playerSize, playerSize);
       }
       xPosForPlayers += movementSpeed;

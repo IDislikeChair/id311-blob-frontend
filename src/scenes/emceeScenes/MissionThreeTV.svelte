@@ -1,8 +1,7 @@
 <script>
   import { Socket } from 'socket.io-client';
   import { PLAYER_NAMES, SOCKET } from '../../stores';
-  import { createEventDispatcher, onMount, onDestroy } from 'svelte';
-  import DebugGoToMission from '../DEBUG_go_to_mission.svelte';
+  import { onMount, onDestroy } from 'svelte';
   import P5 from 'p5-svelte';
 
   import background from '../../images/mission3_background.png';

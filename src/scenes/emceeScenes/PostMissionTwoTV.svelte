@@ -4,7 +4,6 @@
   import { onMount } from 'svelte';
   import level_end from '../../sounds/level_end.mp3';
   import narration from '../../sounds/L2_Post.mp3';
-  import DebugGoToMission from '../DEBUG_go_to_mission.svelte';
 
   /** @type {Socket} */
   let socket;
@@ -113,7 +112,6 @@
   {:else}
     <div class="narrCard" />
   {/if}
-  <!-- <svelte:component this={DebugGoToMission} /> -->
 </div>
 
 <style>

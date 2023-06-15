@@ -27,7 +27,6 @@
   import EndingCredits from './scenes/playerScenes/EndingCredits.svelte';
 
   let socket;
-  let status = 'NONE';
   let currentScene;
 
   let role;
@@ -39,16 +38,9 @@
 
   onMount(async () => {
     const backend = 'https://blob-backend.herokuapp.com';
-    // const backend = 'http://192.168.0.2:3000'; // For local dev
-    // const backend = 'http://192.249.31.81:3000'; // For local dev with welcomeKaist
     socket = io(backend);
 
     SOCKET.set(socket);
-
-    socket.on('connect', () => {
-      //   console.log('connected to socket', backend);
-      status = 'CONNECTED';
-    });
 
     socket.on('disconnect', () => {
       console.log('disconnected');
@@ -186,11 +178,6 @@
 </script>
 
 <main>
-  <!-- <h3>Server Connection: {status}</h3> -->
-  <!-- <div> -->
-  <!-- <Step {socket} /> -->
-  <!-- <Lock {socket} /> -->
-  <!-- </div> -->
   <svelte:component
     this={currentScene}
     on:changeScene={(e) => change_scene(e)}

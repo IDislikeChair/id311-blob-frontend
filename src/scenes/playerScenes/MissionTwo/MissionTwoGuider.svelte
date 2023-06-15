@@ -2,9 +2,6 @@
   import { Socket } from 'socket.io-client';
   import { SOCKET } from '../../../stores';
   import { createEventDispatcher, onMount } from 'svelte';
-  import PostMissionTwo from '../PostMissionTwo.svelte';
-
-  const dispatch = createEventDispatcher();
 
   /** @type {Socket} */
   let socket;
@@ -12,11 +9,9 @@
     socket = value;
   });
 
-  let ding = 'No ding';
-  let updated = false,
-    myPartner = 0,
-    pImageID = 'player1',
-    totPlayers = [];
+  let correctAnswerSignal = false;
+  let updated = false;
+  let pImageID = 'player1';
 
   const innerHeight = window.innerHeight;
 
@@ -31,25 +26,17 @@
 
     socket.on('broadcastPlayerStatus', (players) => {
       updated = true;
-      totPlayers = players;
     });
   });
 
   socket.on('myRolePartner', (partnerNumber) => {
-    myPartner = partnerNumber;
     pImageID = 'player' + (partnerNumber + 1);
   });
 
-  socket.on('start_post_mission', () => {
-    dispatch('changeScene', {
-      new_scene: PostMissionTwo,
-    });
-  });
-
   function doDing() {
-    ding = 'Ding!';
+    correctAnswerSignal = true;
     setTimeout(() => {
-      ding = 'No ding';
+      correctAnswerSignal = false;
     }, 1000);
   }
 </script>
@@ -59,7 +46,7 @@
     Tell your partner<br /> the location <br />when the orb <br />turns green
   </div>
 
-  {#if ding === 'Ding!'}
+  {#if correctAnswerSignal}
     <div class="orb" id="green" />
   {:else}
     <div class="orb" id="red" />

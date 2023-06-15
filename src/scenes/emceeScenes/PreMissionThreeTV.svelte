@@ -2,7 +2,6 @@
   import { Socket } from 'socket.io-client';
   import { SOCKET } from '../../stores';
   import { onMount } from 'svelte';
-  import DebugGoToMission from '../DEBUG_go_to_mission.svelte';
   import narration from '../../sounds/L3_Pre.mp3';
 
   /** @type {Socket} */
@@ -36,7 +35,6 @@
 <div class="preMissionThreeTVContainer">
   <div class="missionCard" />
   <div class="nextBtn" on:click={start} />
-  <!-- <svelte:component this={DebugGoToMission} /> -->
 </div>
 
 <style>

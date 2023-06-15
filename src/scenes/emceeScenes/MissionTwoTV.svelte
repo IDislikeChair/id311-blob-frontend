@@ -1,12 +1,10 @@
 <script>
   import { Socket } from 'socket.io-client';
   import { SOCKET, PLAYER_NAMES } from '../../stores';
-  import { createEventDispatcher, onMount, onDestroy } from 'svelte';
-  import DebugGoToMission from '../DEBUG_go_to_mission.svelte';
+  import { onMount, onDestroy } from 'svelte';
   import { get } from 'svelte/store';
   import P5 from 'p5-svelte';
 
-  import box_open from '../../images/box_open.png';
   import box_closed from '../../images/box_closed.png';
   import lock_active from '../../images/level2/lock_active.png';
   import lock_unlocked from '../../images/level2/lock_unlocked.png';
@@ -21,7 +19,6 @@
   import heart_dead from '../../images/level2/heart_dead.png';
   import game_start from '../../sounds/game_start.mp3';
   import open_chest from '../../sounds/open_chest.mp3';
-  DebugGoToMission;
 
   const margin = 10;
   const width = window.innerWidth - margin,
@@ -65,10 +62,6 @@
     open_chest_audio.play();
   });
 
-  socket.on('submitAnswerFail', (pairNumber) => {
-    // TODO: give feedback to the player
-  });
-
   onDestroy(() => {
     socket.off('broadcastPlayerStatus');
     socket.off('broadcastMission2State');
@@ -78,11 +71,10 @@
 
   const images = {};
   const sketch = (p5) => {
-    let boxOpenRatio, boxClosedRatio;
+    let boxClosedRatio;
 
     p5.preload = function () {
       images['box'] = {};
-      images['box']['open'] = p5.loadImage(box_open);
       images['box']['closed'] = p5.loadImage(box_closed);
 
       images['lock'] = {};
@@ -106,7 +98,6 @@
     p5.setup = function () {
       p5.createCanvas(width, height);
 
-      boxOpenRatio = images['box']['open'].height / images['box']['open'].width;
       boxClosedRatio =
         images['box']['closed'].height / images['box']['closed'].width;
     };

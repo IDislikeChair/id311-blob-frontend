@@ -1,8 +1,7 @@
 <script>
   import { Socket } from 'socket.io-client';
   import { PLAYER_NAMES, SOCKET } from '../../stores';
-  import { createEventDispatcher, onMount, onDestroy } from 'svelte';
-  import DebugGoToMission from '../DEBUG_go_to_mission.svelte';
+  import { onMount, onDestroy } from 'svelte';
   import { get } from 'svelte/store';
   import P5 from 'p5-svelte';
   import game_start from '../../sounds/game_start.mp3';
@@ -14,7 +13,6 @@
   import player4 from '../../images/sprites/player4_back.gif';
   import player5 from '../../images/sprites/player5_back.gif';
   import player6 from '../../images/sprites/player6_back.gif';
-  DebugGoToMission;
 
   // Rendering-related
   const margin = 10;

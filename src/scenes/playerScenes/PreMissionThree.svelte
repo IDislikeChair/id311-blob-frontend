@@ -1,9 +1,7 @@
 <script>
   import { Socket } from 'socket.io-client';
   import { PLAYER_NUMBER, SOCKET } from '../../stores';
-  import { createEventDispatcher, onMount, onDestroy } from 'svelte';
-
-  const dispatch = createEventDispatcher();
+  import { onMount } from 'svelte';
 
   /** @type {Socket} */
   let socket;
@@ -11,11 +9,11 @@
     socket = value;
   });
 
-  let player_number,
-    myName = 'None',
-    alive = true,
-    updated = false,
-    imageID = 'player1';
+  let player_number;
+  let myName = 'None';
+  let alive = true;
+  let updated = false;
+  let imageID = 'player1';
   PLAYER_NUMBER.subscribe((value) => {
     player_number = value;
     imageID = 'player' + (player_number + 1);

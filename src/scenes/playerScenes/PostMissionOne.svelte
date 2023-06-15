@@ -1,10 +1,7 @@
 <script>
   import { Socket } from 'socket.io-client';
   import { PLAYER_NUMBER, SOCKET } from '../../stores';
-  import { createEventDispatcher, onMount, onDestroy } from 'svelte';
-  import PreMissionTwo from './PreMissionTwo.svelte';
-
-  const dispatch = createEventDispatcher();
+  import { onMount } from 'svelte';
 
   /** @type {Socket} */
   let socket;
@@ -12,11 +9,12 @@
     socket = value;
   });
 
-  let player_number,
-    myName = 'None',
-    updated = false,
-    imageID = 'player1',
-    alive = true;
+  let myName = 'None';
+  let updated = false;
+  let imageID = 'player1';
+  let alive = true;
+
+  let player_number;
   PLAYER_NUMBER.subscribe((value) => {
     player_number = value;
     imageID = 'player' + (player_number + 1);
@@ -28,12 +26,6 @@
     while (!socket) {
       await new Promise((resolve) => setTimeout(resolve, 100));
     }
-
-    socket.on('start_pre_mission', () => {
-      dispatch('changeScene', {
-        new_scene: PreMissionTwo,
-      });
-    });
   });
 
   socket.on('broadcastPlayerStatus', (players) => {

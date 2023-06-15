@@ -1,10 +1,7 @@
 <script>
   import { Socket } from 'socket.io-client';
   import { PLAYER_NUMBER, SOCKET } from '../../stores';
-  import { createEventDispatcher, onMount, onDestroy } from 'svelte';
-  import PreMissionThree from './PreMissionThree.svelte';
-
-  const dispatch = createEventDispatcher();
+  import { onMount } from 'svelte';
 
   /** @type {Socket} */
   let socket;
@@ -28,12 +25,6 @@
     while (!socket) {
       await new Promise((resolve) => setTimeout(resolve, 100));
     }
-
-    socket.on('start_pre_mission', () => {
-      dispatch('changeScene', {
-        new_scene: PreMissionThree,
-      });
-    });
   });
 
   socket.on('broadcastPlayerStatus', (players) => {
@@ -42,12 +33,6 @@
     let mySocket = pNames[player_number];
     myName = players[mySocket]['pName'];
     alive = players[mySocket]['alive'] == 0;
-  });
-
-  socket.on('start_post_mission', () => {
-    dispatch('changeScene', {
-      new_scene: PreMissionThree,
-    });
   });
 </script>
 

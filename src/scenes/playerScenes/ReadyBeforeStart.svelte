@@ -1,10 +1,7 @@
 <script>
   import { Socket } from 'socket.io-client';
   import { PLAYER_NUMBER, SOCKET } from '../../stores';
-  import { createEventDispatcher, onMount, onDestroy } from 'svelte';
-  import PreMissionOne from './PreMissionOne.svelte';
-
-  const dispatch = createEventDispatcher();
+  import { onMount } from 'svelte';
 
   /** @type {Socket} */
   let socket;
@@ -27,12 +24,6 @@
     while (!socket) {
       await new Promise((resolve) => setTimeout(resolve, 100));
     }
-
-    socket.on('start_pre_mission', () => {
-      dispatch('changeScene', {
-        new_scene: PreMissionOne,
-      });
-    });
   });
 
   socket.on('broadcastPlayerStatus', (players) => {

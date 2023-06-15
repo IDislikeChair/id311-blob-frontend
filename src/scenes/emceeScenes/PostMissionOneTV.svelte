@@ -2,7 +2,6 @@
   import { Socket } from 'socket.io-client';
   import { SOCKET } from '../../stores';
   import { onMount } from 'svelte';
-  import DebugGoToMission from '../DEBUG_go_to_mission.svelte';
   import level_end from '../../sounds/level_end.mp3';
   import narration from '../../sounds/L1_Post.mp3';
 
@@ -12,21 +11,13 @@
     socket = value;
   });
 
-  let session_id;
-  let alive = [],
-    dead = [];
+  let alive = [];
+  let dead = [];
 
   $: onMount(async () => {
     while (!socket) {
       await new Promise((resolve) => setTimeout(resolve, 100));
     }
-
-    socket.emit('get_session_id');
-
-    socket.on('post_session_id', (id) => {
-      // console.log(id);
-      session_id = id;
-    });
 
     socket.on('broadcastPlayerStatus', (players) => {
       alive = [];

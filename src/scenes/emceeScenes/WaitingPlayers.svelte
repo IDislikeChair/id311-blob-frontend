@@ -2,7 +2,6 @@
   import { Socket } from 'socket.io-client';
   import { PLAYER_NAMES, SOCKET } from '../../stores';
   import { onMount } from 'svelte';
-  import DebugGoToMission from '../DEBUG_go_to_mission.svelte';
   import lobbyMusic from '../../sounds/Fuzzball_Parade.mp3';
 
   /** @type {Socket} */
@@ -127,7 +126,6 @@
       </div>
     </div>
   </div>
-  <!-- <svelte:component this={DebugGoToMission} /> -->
 </div>
 
 <style>

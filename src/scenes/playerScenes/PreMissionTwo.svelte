@@ -1,9 +1,7 @@
 <script>
   import { Socket } from 'socket.io-client';
   import { PLAYER_NUMBER, SOCKET } from '../../stores';
-  import { createEventDispatcher, onMount, onDestroy } from 'svelte';
-
-  const dispatch = createEventDispatcher();
+  import { onMount } from 'svelte';
 
   /** @type {Socket} */
   let socket;
@@ -47,29 +45,22 @@
   });
 
   function getPermission() {
+    // @ts-ignore
     if (typeof DeviceMotionEvent.requestPermission === 'function') {
       // iOS 13+
-      //   status = 'getPermissionFirst, iOS 13+';
+      // @ts-ignore
       DeviceMotionEvent.requestPermission()
         .then((response) => {
-          status = response;
           if (response == 'granted') {
-            window.addEventListener('devicemotion', (e) => {
-              // do something with e
-            });
           }
         })
         .catch(console.error);
     } else {
       // non iOS 13+
-      //   status = 'getPermissionFirst, non iOS 13+';
+      // @ts-ignore
       DeviceOrientationEvent.requestPermission()
         .then((response) => {
-          status = response;
           if (response == 'granted') {
-            window.addEventListener('deviceorientation', (e) => {
-              // do something with e
-            });
           }
         })
         .catch(console.error);
