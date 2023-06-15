@@ -1,5 +1,4 @@
 <script>
-  import { Socket } from 'socket.io-client';
   import { SOCKET, PLAYER_NAMES } from '../../stores';
   import { onMount, onDestroy } from 'svelte';
   import { get } from 'svelte/store';
@@ -21,14 +20,13 @@
   import open_chest from '../../sounds/open_chest.mp3';
 
   const margin = 10;
-  const width = window.innerWidth - margin,
-    height = window.innerHeight - margin;
-  const playerSize = width / 12,
-    boxSize = width / 7,
-    lockSize = width / 17;
+  const width = window.innerWidth - margin;
+  const height = window.innerHeight - margin;
+  const playerSize = width / 12;
+  const boxSize = width / 7;
+  const lockSize = width / 17;
   const tilts = {};
 
-  /** @type {Socket} */
   let socket;
   SOCKET.subscribe((value) => {
     socket = value;
@@ -39,28 +37,28 @@
     while (!socket) {
       await new Promise((resolve) => setTimeout(resolve, 100));
     }
+
+    socket.on('broadcastMission2State', (new_pairs) => {
+      pairs = new_pairs;
+      socket.emit('gotPairs');
+      console.log(pairs);
+
+      for (let i = 0; i < 2; i++) {
+        alive.push(pairs[i]?.solverNumber);
+        alive.push(pairs[i]?.guiderNumber);
+      }
+    });
+
+    socket.on('submitAnswerSuccess', (pairNumber) => {
+      saved_unlock_positions[pairNumber].push(pairs[pairNumber].lockState);
+      open_chest_audio.play();
+    });
   });
 
   let alive = [];
   let saved_unlock_positions = [[], []];
 
-  socket.on('broadcastMission2State', (new_pairs) => {
-    pairs = new_pairs;
-    socket.emit('gotPairs');
-    console.log(pairs);
-
-    for (let i = 0; i < 2; i++) {
-      alive.push(pairs[i]?.solverNumber);
-      alive.push(pairs[i]?.guiderNumber);
-    }
-  });
-
   let open_chest_audio;
-
-  socket.on('submitAnswerSuccess', (pairNumber) => {
-    saved_unlock_positions[pairNumber].push(pairs[pairNumber].lockState);
-    open_chest_audio.play();
-  });
 
   onDestroy(() => {
     socket.off('broadcastPlayerStatus');

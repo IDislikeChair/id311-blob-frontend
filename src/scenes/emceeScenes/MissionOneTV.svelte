@@ -1,5 +1,4 @@
 <script>
-  import { Socket } from 'socket.io-client';
   import { PLAYER_NAMES, SOCKET } from '../../stores';
   import { onMount, onDestroy } from 'svelte';
   import { get } from 'svelte/store';
@@ -14,22 +13,16 @@
   import player5 from '../../images/sprites/player5_back.gif';
   import player6 from '../../images/sprites/player6_back.gif';
 
-  // Rendering-related
   const margin = 10;
   const width = window.innerWidth - margin;
   const height = window.innerHeight - margin;
-  const playerSize = width / 16,
-    boatSize = playerSize * 2.5;
+  const playerSize = width / 16;
+  const boatSize = playerSize * 2.5;
   const stepAmount = height / 200;
 
-  //  Logic-related
-  /**
-   * @type {number[]}
-   */
   let stepCounts = [];
   const reachedPlayers = [];
 
-  /** @type {Socket} */
   let socket;
   SOCKET.subscribe((value) => {
     socket = value;
@@ -40,21 +33,18 @@
       await new Promise((resolve) => setTimeout(resolve, 100));
     }
 
-    socket.on('broadcastStepCounts', (new_player_step_counts) => {
-      console.log(new_player_step_counts);
-      stepCounts = new_player_step_counts;
+    socket.on('broadcastStepCounts', (newStepCounts) => {
+      stepCounts = newStepCounts;
     });
   });
 
   onDestroy(() => {
-    socket.off('broadcastPlayerStatus');
+    socket.off('broadcastStepCounts');
   });
-
-  console.log(stepCounts);
 
   const images = {};
   const sketch = (p5) => {
-    let boatRatio, lineYPos, pRatio;
+    let boatRatio, lineYPos;
 
     p5.preload = function () {
       images['boat'] = p5.loadImage(boat);

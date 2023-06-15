@@ -1,5 +1,4 @@
 <script>
-  import { Socket } from 'socket.io-client';
   import { PLAYER_NAMES, SOCKET } from '../../stores';
   import { onMount, onDestroy } from 'svelte';
   import P5 from 'p5-svelte';
@@ -20,10 +19,9 @@
   import shoot from '../../sounds/shoot.mp3';
 
   const margin = 0;
-  const width = window.innerWidth - margin,
-    height = window.innerHeight - margin;
+  const width = window.innerWidth - margin;
+  const height = window.innerHeight - margin;
 
-  /** @type {Socket} */
   let socket;
   SOCKET.subscribe((value) => {
     socket = value;
@@ -32,40 +30,17 @@
   const GAME_TICK_TIME = 16;
   const MOVE_RATE = (0.5 * GAME_TICK_TIME) / 200;
 
-  // Proxy class
-  class TargetDummy {
-    /**
-     * @param {number} victimNumber
-     */
-    constructor(victimNumber) {
-      this.victimNumber = victimNumber;
-      this.victimHealthPoint = 5;
-
-      this.cursorPosition = { x: 50, y: 50 };
-      this.cursorMomentum = { x: 0, y: 0 };
-
-      this.targetPosition = { x: NaN, y: NaN };
-    }
-  }
-
-  /** @type {Object.<number, TargetDummy>} */
   let targetDummies;
-
-  /** @type {[number, number]} */
   let lives = [3, 3];
-
-  /** @type {number[]} */
   let alive = [];
 
   const calc_movement_tick = () => {
     if (targetDummies == undefined) return;
 
     for (let targetDummy of Object.values(targetDummies)) {
-      // recalculate position by target's momentum.
       targetDummy.cursorPosition.x += targetDummy.cursorMomentum.x * MOVE_RATE;
       targetDummy.cursorPosition.y += targetDummy.cursorMomentum.y * MOVE_RATE;
 
-      // limit range to from 0 to 99.
       if (targetDummy.cursorPosition.x < 0) targetDummy.cursorPosition.x = 0;
       if (targetDummy.cursorPosition.x > 99) targetDummy.cursorPosition.x = 99;
       if (targetDummy.cursorPosition.y < 0) targetDummy.cursorPosition.y = 0;
@@ -85,8 +60,6 @@
     }
 
     socket.on('broadcastMission3State', (newTargetDummies) => {
-      //   console.log(newTargetDummies);
-
       if (alive.length === 0) {
         alive = Object.keys(newTargetDummies).map((key) => parseInt(key));
       }

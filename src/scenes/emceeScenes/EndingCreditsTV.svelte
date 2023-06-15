@@ -1,5 +1,4 @@
 <script>
-  import { onMount } from 'svelte';
   import P5 from 'p5-svelte';
 
   import background from '../../images/ending_background.png';
@@ -12,14 +11,13 @@
   import player5 from '../../images/sprites/player5_side.gif';
   import player6 from '../../images/sprites/player6_side.gif';
 
-  $: onMount(async () => {});
-
-  // Rendering-related
+  let xPosForBg, xPosForPlayers;
+  let creditsRatio, thankRatio;
   const width = window.innerWidth;
   const height = window.innerHeight;
   const playerSize = width / 16;
-  const scrollSpeed = width / 1600,
-    movementSpeed = width / 1800;
+  const scrollSpeed = width / 1600;
+  const movementSpeed = width / 1800;
 
   const sketch = (p5) => {
     const images = {};
@@ -37,8 +35,6 @@
       images['players'].push(p5.loadImage(player6));
     };
 
-    let xPosForBg, xPosForPlayers;
-    let creditsRatio, thankRatio;
     p5.setup = function () {
       p5.createCanvas(width, height);
       xPosForBg = 0;

@@ -1,10 +1,8 @@
 <script>
-  import { Socket } from 'socket.io-client';
   import { PLAYER_NAMES, SOCKET } from '../../stores';
   import { onMount } from 'svelte';
   import lobbyMusic from '../../sounds/Fuzzball_Parade.mp3';
 
-  /** @type {Socket} */
   let socket;
   SOCKET.subscribe((value) => {
     socket = value;
@@ -24,17 +22,18 @@
     socket.on('post_session_id', (id) => {
       sessionId = id;
     });
+
+    socket.on('broadcastPlayerStatus', (players) => {
+      for (let socketID of Object.keys(players)) {
+        if (pNames.includes(players[socketID].pName)) continue;
+        pNames.push(players[socketID].pName);
+      }
+      playerNum = pNames.length;
+
+      PLAYER_NAMES.set(pNames.slice(0, 6));
+    });
   });
 
-  socket.on('broadcastPlayerStatus', (players) => {
-    for (let socketID of Object.keys(players)) {
-      if (pNames.includes(players[socketID].pName)) continue;
-      pNames.push(players[socketID].pName);
-    }
-    playerNum = pNames.length;
-
-    PLAYER_NAMES.set(pNames.slice(0, 6));
-  });
   const start = () => {
     if (pNames.length >= 6) {
       PLAYER_NAMES.set(pNames.slice(0, 6));

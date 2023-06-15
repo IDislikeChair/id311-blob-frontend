@@ -1,10 +1,8 @@
 <script>
-  import { Socket } from 'socket.io-client';
   import { SOCKET } from '../../stores';
   import { onMount } from 'svelte';
   import narration from '../../sounds/L2_Pre.mp3';
 
-  /** @type {Socket} */
   let socket;
   SOCKET.subscribe((value) => {
     socket = value;
@@ -26,7 +24,6 @@
 <div class="preMissionTwoTVContainer">
   <div class="missionCard" />
   <div class="nextBtn" on:click={start} />
-  <!-- <svelte:component this={DebugGoToMission} /> -->
 </div>
 
 <style>
