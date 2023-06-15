@@ -1,9 +1,7 @@
 <script>
-  import { Socket } from 'socket.io-client';
   import { PLAYER_NUMBER, SOCKET } from '../../stores';
   import { onMount } from 'svelte';
 
-  /** @type {Socket} */
   let socket;
   SOCKET.subscribe((value) => {
     socket = value;
@@ -26,14 +24,14 @@
     while (!socket) {
       await new Promise((resolve) => setTimeout(resolve, 100));
     }
-  });
 
-  socket.on('broadcastPlayerStatus', (players) => {
-    updated = true;
-    let pNames = Object.keys(players);
-    let mySocket = pNames[player_number];
-    myName = players[mySocket]['pName'];
-    alive = players[mySocket]['alive'] == 0;
+    socket.on('broadcastPlayerStatus', (players) => {
+      updated = true;
+      let pNames = Object.keys(players);
+      let mySocket = pNames[player_number];
+      myName = players[mySocket]['pName'];
+      alive = players[mySocket]['alive'] == 0;
+    });
   });
 </script>
 

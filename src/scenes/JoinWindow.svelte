@@ -3,11 +3,9 @@
   import { PLAYER_NUMBER, ROLE, SOCKET } from '../stores';
   import WaitingPlayers from './emceeScenes/WaitingPlayers.svelte';
   import ReadyBeforeStart from './playerScenes/ReadyBeforeStart.svelte';
-  import { Socket } from 'socket.io-client';
 
   const dispatch = createEventDispatcher();
 
-  /** @type {Socket} */
   let socket;
   SOCKET.subscribe((value) => {
     socket = value;

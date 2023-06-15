@@ -1,14 +1,11 @@
 <script>
-  import { Socket } from 'socket.io-client';
   import { SOCKET } from '../../stores';
   import { createEventDispatcher, onMount } from 'svelte';
   import MissionTwoSolver from './MissionTwo/MissionTwoSolver.svelte';
   import MissionTwoGuider from './MissionTwo/MissionTwoGuider.svelte';
-  import PostMissionTwo from './PostMissionTwo.svelte';
 
   const dispatch = createEventDispatcher();
 
-  /** @type {Socket} */
   let socket;
   SOCKET.subscribe((value) => {
     socket = value;
@@ -30,12 +27,6 @@
           dispatch('changeScene', { new_scene: MissionTwoGuider });
           break;
       }
-    });
-  });
-
-  socket.on('start_post_mission', () => {
-    dispatch('changeScene', {
-      new_scene: PostMissionTwo,
     });
   });
 </script>

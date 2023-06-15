@@ -1,10 +1,7 @@
 <script>
-  import { Socket } from 'socket.io-client';
   import { PLAYER_NUMBER, SOCKET } from '../../stores';
   import { onMount, onDestroy } from 'svelte';
-  import PostMissionThree from './PostMissionThree.svelte';
 
-  /** @type {Socket} */
   let socket;
   SOCKET.subscribe((value) => {
     socket = value;

@@ -1,9 +1,7 @@
 <script>
-  import { Socket } from 'socket.io-client';
   import { SOCKET } from '../../../stores';
   import { onMount, onDestroy } from 'svelte';
 
-  /** @type {Socket} */
   let socket;
   SOCKET.subscribe((value) => {
     socket = value;
@@ -39,10 +37,10 @@
     socket.on('broadcastPlayerStatus', (players) => {
       updated = true;
     });
-  });
 
-  socket.on('myRolePartner', (partnerNumber) => {
-    pImageID = 'player' + (partnerNumber + 1);
+    socket.on('myRolePartner', (partnerNumber) => {
+      pImageID = 'player' + (partnerNumber + 1);
+    });
   });
 
   onDestroy(() => {

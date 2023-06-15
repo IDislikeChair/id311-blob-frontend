@@ -1,11 +1,9 @@
 <script>
-  import { Socket } from 'socket.io-client';
   import { SOCKET } from '../../stores';
   import { onMount } from 'svelte';
   import level_end from '../../sounds/level_end.mp3';
   import narration from '../../sounds/L1_Post.mp3';
 
-  /** @type {Socket} */
   let socket;
   SOCKET.subscribe((value) => {
     socket = value;
